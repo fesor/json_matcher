@@ -1,0 +1,5 @@
+---
+suites:
+  event_suite:
+    namespace: Fesor\JsonMatcher
+    psr4_prefix: Fesor\JsonMatcher
