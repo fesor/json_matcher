@@ -57,6 +57,43 @@ class JsonHelper
     }
 
     /**
+     * Checks is given JSON contains somewhere in
+     *
+     * @param  mixed $haystack contains parsed JSON value
+     * @param  string $needle
+     * @return bool
+     */
+    public function isIncludes($haystack, $needle)
+    {
+
+        $parsedJson = $this->parse($needle);
+        $normalizedData = $this->generateNormalizedJson($haystack);
+        if (!is_object($haystack) && !is_array($haystack)) {
+            if (is_string($haystack) && is_string($parsedJson)) {
+                return false !== strpos($haystack, $parsedJson);
+            }
+        }
+
+        if ($normalizedData === $needle) {
+            return true;
+        }
+
+        if (is_object($haystack)) {
+            $haystack = get_object_vars($haystack);
+        }
+
+        if (is_array($haystack)) {
+            foreach ($haystack as $value) {
+                if ($this->isIncludes($value, $needle)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param $json
      * @param  null   $path
      * @return string

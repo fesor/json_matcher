@@ -94,6 +94,7 @@ class JsonMatcher
     /**
      * @param  string $json
      * @param  string $type
+     * @param  array $options
      * @return bool
      */
     public function haveType($json, $type, array $options = [])
@@ -110,6 +111,7 @@ class JsonMatcher
     /**
      * @param  string $json
      * @param  string $expected
+     * @param  array $options
      * @return bool
      */
     public function includes($json, $expected, array $options = [])
@@ -120,7 +122,7 @@ class JsonMatcher
             $options, [static::OPTION_PATH => null]
         ));
 
-        return $this->isIncludes($this->jsonHelper->parse($actual), $expected);
+        return $this->jsonHelper->isIncludes($this->jsonHelper->parse($actual), $expected);
     }
 
     /**
@@ -159,43 +161,6 @@ class JsonMatcher
                 $this->getExcludedKeys($options)
             )
         );
-    }
-
-    /**
-     * @param  string $data
-     * @param  string $json
-     * @return bool
-     */
-    private function isIncludes($data, $json)
-    {
-
-        $parsedJson = $this->jsonHelper->parse($json);
-        $normalizedData = $this->jsonHelper->generateNormalizedJson($data);
-        if (!is_object($data) && !is_array($data)) {
-            if (is_string($data) && is_string($parsedJson)) {
-                return false !== strpos($data, $parsedJson);
-            }
-
-            return $normalizedData === $json;
-        }
-
-        if ($normalizedData === $json) {
-            return true;
-        }
-
-        if (is_object($data)) {
-            $data = get_object_vars($data);
-        }
-
-        if (is_array($data)) {
-            foreach ($data as $value) {
-                if ($this->isIncludes($value, $json)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     private function getPath(array $options)
