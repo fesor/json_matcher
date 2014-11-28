@@ -23,6 +23,11 @@ class JsonMatcher
     private $excludeKeys;
 
     /**
+     * @var string
+     */
+    private $subject;
+
+    /**
      * @param JsonHelper $jsonHelper
      * @param array      $excludeKeys
      */
@@ -33,14 +38,13 @@ class JsonMatcher
     }
 
     /**
-     * @param  string $actual
      * @param  string $expected
      * @param  array  $options
      * @return bool
      */
-    public function equal($actual, $expected, array $options = [])
+    public function equal($expected, array $options = [])
     {
-        $actual = $this->scrub($actual, $options);
+        $actual = $this->scrub($this->subject, $options);
         $expected = $this->scrub($expected, array_diff_key(
             // we should pass all options except `path`
             $options, [static::OPTION_PATH => null]
@@ -50,19 +54,18 @@ class JsonMatcher
     }
 
     /**
-     * @param  string      $json
      * @param  string|null $path
      * @param  array       $options
      * @return bool
      */
-    public function havePath($json, $path, array $options = [])
+    public function havePath($path, array $options = [])
     {
         // get base path
         $basePath = $this->getPath($options);
         $path = ltrim($basePath . '/' . $path, '/');
 
         try {
-            $this->jsonHelper->parse($json, $path);
+            $this->jsonHelper->parse($this->subject, $path);
         } catch (MissingPathException $e) {
             return false;
         }
@@ -71,14 +74,13 @@ class JsonMatcher
     }
 
     /**
-     * @param  string  $json
      * @param  integer $expectedSize
      * @param  array   $options
      * @return bool
      */
-    public function haveSize($json, $expectedSize, array $options = [])
+    public function haveSize($expectedSize, array $options = [])
     {
-        $data = $this->jsonHelper->parse($json, $this->getPath($options));
+        $data = $this->jsonHelper->parse($this->subject, $this->getPath($options));
 
         if (!is_array($data) && !is_object($data)) {
             return false;
@@ -92,14 +94,13 @@ class JsonMatcher
     }
 
     /**
-     * @param  string $json
      * @param  string $type
      * @param  array $options
      * @return bool
      */
-    public function haveType($json, $type, array $options = [])
+    public function haveType($type, array $options = [])
     {
-        $data = $this->jsonHelper->parse($json, $this->getPath($options));
+        $data = $this->jsonHelper->parse($this->subject, $this->getPath($options));
 
         if ($type == 'float') {
             $type = 'double';
@@ -110,19 +111,25 @@ class JsonMatcher
 
     /**
      * @param  string $json
-     * @param  string $expected
      * @param  array $options
      * @return bool
      */
-    public function includes($json, $expected, array $options = [])
+    public function includes($json, array $options = [])
     {
-        $actual = $this->scrub($json, $options);
-        $expected = $this->scrub($expected, array_diff_key(
+        $actual = $this->scrub($this->subject, $options);
+        $expected = $this->scrub($json, array_diff_key(
             // we should pass all options except `path`
             $options, [static::OPTION_PATH => null]
         ));
 
         return $this->jsonHelper->isIncludes($this->jsonHelper->parse($actual), $expected);
+    }
+
+    public function __invoke($subject)
+    {
+        $this->subject = $subject;
+
+        return $this;
     }
 
     /**
@@ -141,8 +148,8 @@ class JsonMatcher
             throw new \RuntimeException(sprintf('Matcher "%s" not supported', $matcher));
         }
 
-        if (count($arguments) < 2) {
-            throw new \RuntimeException('Matcher requires two arguments');
+        if (count($arguments) < 1) {
+            throw new \RuntimeException('Matcher requires one argument');
         }
 
         return !call_user_func_array([$this, $matcher], $arguments);

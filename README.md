@@ -21,7 +21,7 @@ composer require fesor/json_match
 ### equal
 This is most common matcher of all. You take two json strings and compares it. Except that before comparsion this matcher will normalize structure of both JSON strings, will reorder keys, exclude some of them (this is configurable) and then will simply assert that both strings are equal. You can specify list of excluded keys with `excluding` options:
 ```
-$matcher->equal($actula, $expected, ['excluding' => ['id']]);
+$my($actula)->equal($expected, ['excluding' => ['id']]);
 ```
 
 If you have some keys, which contains some time dependent value of some server-generated IDs it is more convenient to specify list of excluded-by-default keys when you construct matcher object:
@@ -31,8 +31,8 @@ $matcher = JsonMatcher::create(['id', 'created_at', 'updated_at']);
 
 If you want the values for these keys were taken into account during the matching, you can specify list of included keys with `including` options
 ```
-$matcher = JsonMatcher::create(['id', 'created_at', 'updated_at']);
-$matcher->equal($expected, $actual, ['including' => ['id']]);
+$my = JsonMatcher::create(['id', 'created_at', 'updated_at']);
+$my($expected)->equal($actual, ['including' => ['id']]);
 ```
 
 Also you can specify json path on which matching should be done via `at` options. We will back to this later since all matchers supports this option.
@@ -41,7 +41,7 @@ Also you can specify json path on which matching should be done via `at` options
 This matcher is pretty match the same as `equal` matcher except that is recursively scan given JSON and tries to find expected JSON in any values. This is useful for cases when you checking that some record exists in collection and you do not know or don't whant to know specific path to it.
 
 ```php
-$actual = <<<EOD
+$json = <<<EOD
 {
     "collection": [
         "json",
@@ -50,8 +50,8 @@ $actual = <<<EOD
 }
 EOD;
 
-$expected = '"matcher"';
-$matcher->includes($actual, $expected, ['at' => 'collection']);
+$needle = '"matcher"';
+$my($json)->includes($needle, ['at' => 'collection']);
 ```
 
 This matcher works the same way as `equal` matcher, so it accepts the same options.
@@ -69,7 +69,7 @@ $json = <<<EOD
 }
 EOD;
 
-$matcher->havePath($json, 'collection/1');
+$my($json)->havePath('collection/1');
 ```
 
 ### haveSize
@@ -85,7 +85,7 @@ $json = <<<EOD
 }
 EOD;
 
-$matcher->haveSize($json, 2, ['at' => 'collection']);
+$my($json)->haveSize(2, ['at' => 'collection']);
 ```
 
 ### haveType
@@ -101,18 +101,18 @@ $json = <<<EOD
 }
 EOD;
 
-$matcher->haveType($json, 'array', ['at' => 'collection']);
-$matcher->haveType($json, 'object', ['at' => 'collection/0']);
-$matcher->haveType($json, 'string', ['at' => 'collection/1']);
-$matcher->haveType($json, 'integer', ['at' => 'collection/2']);
-$matcher->haveType($json, 'float', ['at' => 'collection/3']);
+$my($json)->haveType('array', ['at' => 'collection']);
+$my($json)->haveType('object', ['at' => 'collection/0']);
+$my($json)->haveType('string', ['at' => 'collection/1']);
+$my($json)->haveType('integer', ['at' => 'collection/2']);
+$my($json)->haveType('float', ['at' => 'collection/3']);
 ```
 
 ### Negative matching
 To invert expectations just call matcher methods with `not` prefix:
 ```php
-$matcher->notEqual($actulat, $expected);
-$matcher->notIncludes($json, $part);
+$my($actulat)->notEqual($expected);
+$my($json)->notIncludes($part);
 ```
 
 ### Json Path
@@ -127,7 +127,7 @@ $json = <<<EOD
 }
 EOD;
 $expected = '"item"';
-$matcher->equal($actual, $expected, ['at' => 'collection/0']);
+$my($actual)->equal($expected, ['at' => 'collection/0']);
 ```
 
 
