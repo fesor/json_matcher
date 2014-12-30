@@ -18,10 +18,30 @@ composer require fesor/json_match
 
 ## Matchers
 
-### equal
-This is most common matcher of all. You take two json strings and compares it. Except that before comparsion this matcher will normalize structure of both JSON strings, will reorder keys, exclude some of them (this is configurable) and then will simply assert that both strings are equal. You can specify list of excluded keys with `excluding` options:
+To create `JsonMatcher` instance all you need to do is just call named constructor `create`.
+
 ```
-$my($actula)->equal($expected, ['excluding' => ['id']]);
+$matcher = JsonMatcher::create();
+```
+
+This named constructor also have some additional options. We'll back to them later.
+
+Also you can chain all matchers since they will throw an exception if JSON have incorrect data.
+
+```
+$matcher = JsonMatcher::create(['id']);
+$matcher($jsonResponse)
+    ->includes($userJson, ['at'=>'friends'])
+    ->haveSize(2, ['at' => 'friends'])
+;
+```
+
+### equal
+This is most common matcher of all. You take two json strings and compares it. Except that before compassion this matcher will normalize structure of both JSON strings, will reorder keys, exclude some of them (this is configurable) and then will simply assert that both strings are equal. You can specify list of excluded keys with `excluding` options:
+```
+$jsonResponse = '["id": 1, "json": "spec"]';
+$expectedJson = '["json": "spec"]';
+$matcher($jsonResponse)->equal($expectedJson, ['excluding' => ['id']]);
 ```
 
 If you have some keys, which contains some time dependent value of some server-generated IDs it is more convenient to specify list of excluded-by-default keys when you construct matcher object:
@@ -31,8 +51,8 @@ $matcher = JsonMatcher::create(['id', 'created_at', 'updated_at']);
 
 If you want the values for these keys were taken into account during the matching, you can specify list of included keys with `including` options
 ```
-$my = JsonMatcher::create(['id', 'created_at', 'updated_at']);
-$my($expected)->equal($actual, ['including' => ['id']]);
+$matcher = JsonMatcher::create(['id', 'created_at', 'updated_at']);
+$matcher($jsonResponse)->equal($expectedJson, ['including' => ['id']]);
 ```
 
 Also you can specify json path on which matching should be done via `at` options. We will back to this later since all matchers supports this option.
@@ -51,7 +71,7 @@ $json = <<<EOD
 EOD;
 
 $needle = '"matcher"';
-$my($json)->includes($needle, ['at' => 'collection']);
+$matcher($json)->includes($needle, ['at' => 'collection']);
 ```
 
 This matcher works the same way as `equal` matcher, so it accepts the same options.
@@ -69,7 +89,7 @@ $json = <<<EOD
 }
 EOD;
 
-$my($json)->havePath('collection/1');
+$matcher($json)->havePath('collection/1');
 ```
 
 ### haveSize
@@ -85,7 +105,7 @@ $json = <<<EOD
 }
 EOD;
 
-$my($json)->haveSize(2, ['at' => 'collection']);
+$matcher($json)->haveSize(2, ['at' => 'collection']);
 ```
 
 ### haveType
@@ -101,18 +121,22 @@ $json = <<<EOD
 }
 EOD;
 
-$my($json)->haveType('array', ['at' => 'collection']);
-$my($json)->haveType('object', ['at' => 'collection/0']);
-$my($json)->haveType('string', ['at' => 'collection/1']);
-$my($json)->haveType('integer', ['at' => 'collection/2']);
-$my($json)->haveType('float', ['at' => 'collection/3']);
+$matcher($json)
+    ->haveType('array', ['at' => 'collection'])
+    ->haveType('object', ['at' => 'collection/0'])
+    ->haveType('string', ['at' => 'collection/1'])
+    ->haveType('integer', ['at' => 'collection/2'])
+    ->haveType('float', ['at' => 'collection/3'])
+;
 ```
 
 ### Negative matching
 To invert expectations just call matcher methods with `not` prefix:
 ```php
-$my($actulat)->notEqual($expected);
-$my($json)->notIncludes($part);
+$matcher($json)
+    ->notEqual($expected)
+    ->notIncludes($part)
+;
 ```
 
 ### Json Path
@@ -127,7 +151,5 @@ $json = <<<EOD
 }
 EOD;
 $expected = '"item"';
-$my($actual)->equal($expected, ['at' => 'collection/0']);
+$matcher($actual)->equal($expected, ['at' => 'collection/0']);
 ```
-
-

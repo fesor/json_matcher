@@ -2,7 +2,7 @@
 
 namespace Fesor\JsonMatcher\Exception;
 
-class MissingPathException extends JsonMatcherException
+class MissingPathException extends \RuntimeException
 {
 
     public function __construct($path)
