@@ -2,6 +2,10 @@
 
 namespace Fesor\JsonMatcher;
 
+use Fesor\JsonMatcher\Exception\JsonEqualityException;
+use Fesor\JsonMatcher\Exception\JsonIncludesException;
+use Fesor\JsonMatcher\Exception\JsonSizeException;
+use Fesor\JsonMatcher\Exception\JsonTypeException;
 use Fesor\JsonMatcher\Exception\MissingPathException;
 use Fesor\JsonMatcher\Helper\JsonHelper;
 
@@ -11,6 +15,7 @@ class JsonMatcher
     const OPTION_PATH = 'at';
     const OPTION_EXCLUDE_KEYS = 'excluding';
     const OPTION_INCLUDE_KEYS = 'including';
+    const OPTION_NEGATIVE = '_inverse';
 
     /**
      * @var JsonHelper
@@ -40,7 +45,7 @@ class JsonMatcher
     /**
      * @param  string $expected
      * @param  array  $options
-     * @return bool
+     * @return $this
      */
     public function equal($expected, array $options = [])
     {
@@ -50,13 +55,18 @@ class JsonMatcher
             $options, [static::OPTION_PATH => null]
         ));
 
-        return $actual === $expected;
+        
+        if (static::isPositive($options) xor $actual === $expected) {
+            throw JsonEqualityException::create($options);
+        }
+        
+        return $this;
     }
 
     /**
      * @param  string|null $path
      * @param  array       $options
-     * @return bool
+     * @return $this
      */
     public function havePath($path, array $options = [])
     {
@@ -64,39 +74,40 @@ class JsonMatcher
         $basePath = $this->getPath($options);
         $path = ltrim($basePath . '/' . $path, '/');
 
-        try {
-            $this->jsonHelper->parse($this->subject, $path);
-        } catch (MissingPathException $e) {
-            return false;
-        }
-
-        return true;
+        $this->jsonHelper->parse($this->subject, $path);
+        
+        return $this;
     }
 
     /**
      * @param  integer $expectedSize
      * @param  array   $options
-     * @return bool
+     * @return $this
      */
     public function haveSize($expectedSize, array $options = [])
     {
         $data = $this->jsonHelper->parse($this->subject, $this->getPath($options));
 
-        if (!is_array($data) && !is_object($data)) {
-            return false;
-        }
-
         if (is_object($data)) {
             $data = get_object_vars($data);
         }
 
-        return $expectedSize === count($data);
+        if (!(is_array($data) || is_string($data))) {
+            
+            throw new JsonSizeException('Can\'t get size of scalar JSON value');
+        }
+
+        if ($this->isPositive($options) xor $expectedSize === count($data)) {
+            throw JsonSizeException::create($expectedSize, count($data), $options);
+        }
+        
+        return $this;
     }
 
     /**
      * @param  string $type
      * @param  array $options
-     * @return bool
+     * @return $this
      */
     public function haveType($type, array $options = [])
     {
@@ -106,13 +117,18 @@ class JsonMatcher
             $type = 'double';
         }
 
-        return gettype($data) === $type;
+        $actualType = gettype($data);
+        if ($this->isPositive($options) xor $actualType === $type) {
+            throw JsonTypeException::create($type, $actualType, $options);
+        }
+
+        return $this;
     }
 
     /**
      * @param  string $json
      * @param  array $options
-     * @return bool
+     * @return $this
      */
     public function includes($json, array $options = [])
     {
@@ -121,8 +137,16 @@ class JsonMatcher
             // we should pass all options except `path`
             $options, [static::OPTION_PATH => null]
         ));
+        
+        if (
+            $this->isPositive($options) xor $this->jsonHelper->isIncludes(
+                $this->jsonHelper->parse($actual), $expected
+            )
+        ) {
+            throw JsonIncludesException::create($options);
+        }
 
-        return $this->jsonHelper->isIncludes($this->jsonHelper->parse($actual), $expected);
+        return $this;
     }
 
     public function __invoke($subject)
@@ -149,8 +173,17 @@ class JsonMatcher
         }
 
         if (count($arguments) < 1) {
-            throw new \RuntimeException('Matcher requires one argument');
+            throw new \RuntimeException('Matcher requires at least one argument');
         }
+        
+        $options = array_pop($arguments);
+        if (!is_array($options)) {
+            array_push($arguments, $options);
+            $options = [];
+        }
+        
+        $options[self::OPTION_NEGATIVE] = true;
+        array_push($arguments, $options);
 
         return !call_user_func_array([$this, $matcher], $arguments);
     }
@@ -188,6 +221,11 @@ class JsonMatcher
         return array_key_exists($optionName, $options) ?
             $options[$optionName] : $default
         ;
+    }
+    
+    private function isPositive(array $options)
+    {
+        return empty($options[self::OPTION_NEGATIVE]);
     }
 
 }
