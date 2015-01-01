@@ -15,7 +15,7 @@ class JsonMatcher
     const OPTION_PATH = 'at';
     const OPTION_EXCLUDE_KEYS = 'excluding';
     const OPTION_INCLUDE_KEYS = 'including';
-    const OPTION_NEGATIVE = '_inverse';
+    const OPTION_NEGATIVE = '_negative';
 
     /**
      * @var JsonHelper
