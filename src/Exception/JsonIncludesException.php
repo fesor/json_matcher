@@ -8,11 +8,11 @@ class JsonIncludesException extends MatchException
 {
 
     /**
-     * @param array $options
+     * @param  array  $options
      * @return static
      */
-    public static function create(array $options) {
-
+    public static function create(array $options)
+    {
         if (self::isPositive($options)) {
             $message = 'Expected included JSON%s';
         } else {

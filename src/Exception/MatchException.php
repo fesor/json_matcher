@@ -16,7 +16,7 @@ abstract class MatchException extends \RuntimeException
     }
 
     /**
-     * @param array $options
+     * @param  array  $options
      * @return string
      */
     protected static function getAt(array $options)
@@ -29,7 +29,7 @@ abstract class MatchException extends \RuntimeException
     }
 
     /**
-     * @param array $options
+     * @param  array $options
      * @return bool
      */
     protected static function isPositive(array $options)

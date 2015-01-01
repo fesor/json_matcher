@@ -59,7 +59,7 @@ class JsonHelper
     /**
      * Checks is given JSON contains somewhere in
      *
-     * @param  mixed $haystack contains parsed JSON value
+     * @param  mixed  $haystack contains parsed JSON value
      * @param  string $needle
      * @return bool
      */

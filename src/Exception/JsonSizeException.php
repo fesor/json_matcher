@@ -8,13 +8,13 @@ class JsonSizeException extends MatchException
 {
 
     /**
-     * @param integer $expectedSize
-     * @param integer $actualSize
-     * @param array $options
+     * @param  integer $expectedSize
+     * @param  integer $actualSize
+     * @param  array   $options
      * @return static
      */
-    public static function create($expectedSize, $actualSize, array $options) {
-
+    public static function create($expectedSize, $actualSize, array $options)
+    {
         if (self::isPositive($options)) {
             $message = sprintf('Expected JSON value size to not be %d%s', $expectedSize, self::getAt($options));
         } else {
@@ -23,6 +23,5 @@ class JsonSizeException extends MatchException
 
         return new static($message);
     }
-
 
 }
