@@ -7,6 +7,7 @@ use Fesor\JsonMatcher\Exception\JsonIncludesException;
 use Fesor\JsonMatcher\Exception\JsonSizeException;
 use Fesor\JsonMatcher\Exception\JsonTypeException;
 use Fesor\JsonMatcher\Helper\JsonHelper;
+use Seld\JsonLint\JsonParser;
 
 class JsonMatcher
 {
@@ -39,6 +40,17 @@ class JsonMatcher
     {
         $this->jsonHelper = $jsonHelper;
         $this->excludeKeys = $excludeKeys;
+    }
+
+    /**
+     * Named constructor for simplify usage
+     *
+     * @param  array       $excludedKeys
+     * @return JsonMatcher
+     */
+    public static function create(array $excludedKeys = ['id'])
+    {
+        return new JsonMatcher(new JsonHelper(new JsonParser()), $excludedKeys);
     }
 
     /**
@@ -147,6 +159,10 @@ class JsonMatcher
         return $this;
     }
 
+    /**
+     * @param  string $subject
+     * @return $this
+     */
     public function __invoke($subject)
     {
         $this->subject = $subject;
@@ -155,9 +171,9 @@ class JsonMatcher
     }
 
     /**
-     * @param $name
-     * @param  array $arguments
-     * @return bool
+     * @param  string $name
+     * @param  array  $arguments
+     * @return $this
      */
     public function __call($name, array $arguments = [])
     {
