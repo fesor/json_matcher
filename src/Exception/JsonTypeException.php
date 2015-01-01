@@ -16,9 +16,9 @@ class JsonTypeException extends MatchException
     public static function create($expectedType, $actualType, array $options)
     {
         if (self::isPositive($options)) {
-            $message = sprintf('Expected JSON value type to not be %s%s', $expectedType, self::getAt($options));
-        } else {
             $message = sprintf('Expected JSON value size to be %s, but got %s%s', $expectedType, $actualType, self::getAt($options));
+        } else {
+            $message = sprintf('Expected JSON value type to not be %s%s', $expectedType, self::getAt($options));
         }
 
         return new static($message);
