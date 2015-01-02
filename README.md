@@ -51,19 +51,19 @@ All matchers are chainable, supports negative matching and some options. See det
 
 ### equal
 This is most common matcher of all. You take two json strings and compares it. Except that before compassion this matcher will normalize structure of both JSON strings, will reorder keys, exclude some of them (this is configurable) and then will simply assert that both strings are equal. You can specify list of excluded keys with `excluding` options:
-```
+```php
 $jsonResponse = '["id": 1, "json": "spec"]';
 $expectedJson = '["json": "spec"]';
 $matcher($jsonResponse)->equal($expectedJson, ['excluding' => ['id']]);
 ```
 
 If you have some keys, which contains some time dependent value of some server-generated IDs it is more convenient to specify list of excluded-by-default keys when you construct matcher object:
-```
+```php
 $matcher = JsonMatcher::create(['id', 'created_at', 'updated_at']);
 ```
 
 If you want the values for these keys were taken into account during the matching, you can specify list of included keys with `including` options
-```
+```php
 $matcher = JsonMatcher::create(['id', 'created_at', 'updated_at']);
 $matcher($jsonResponse)->equal($expectedJson, ['including' => ['id']]);
 ```
