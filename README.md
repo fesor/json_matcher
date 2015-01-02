@@ -54,18 +54,21 @@ This is most common matcher of all. You take two json strings and compares it. E
 ```php
 $jsonResponse = '["id": 1, "json": "spec"]';
 $expectedJson = '["json": "spec"]';
-$matcher($jsonResponse)->equal($expectedJson, ['excluding' => ['id']]);
+$matcher
+    ->setSubject($jsonResponse)
+    ->equal($expectedJson, ['excluding' => ['id']])
+;
 ```
 
 If you have some keys, which contains some time dependent value of some server-generated IDs it is more convenient to specify list of excluded-by-default keys when you construct matcher object:
 ```php
-$matcher = JsonMatcher::create(['id', 'created_at', 'updated_at']);
+$matcher = JsonMatcher::create($subject, ['id', 'created_at', 'updated_at']);
 ```
 
 If you want the values for these keys were taken into account during the matching, you can specify list of included keys with `including` options
 ```php
-$matcher = JsonMatcher::create(['id', 'created_at', 'updated_at']);
-$matcher($jsonResponse)->equal($expectedJson, ['including' => ['id']]);
+$matcher = JsonMatcher::create($jsonResponse, ['id', 'created_at', 'updated_at']);
+$jsonResponseSubject->equal($expectedJson, ['including' => ['id']]);
 ```
 
 Also you can specify json path on which matching should be done via `at` options. We will back to this later since all matchers supports this option.
@@ -84,7 +87,10 @@ $json = <<<EOD
 EOD;
 
 $needle = '"matcher"';
-$matcher($json)->includes($needle, ['at' => 'collection']);
+$matcher
+    ->setSubject($json)
+    ->includes($needle, ['at' => 'collection'])
+;
 ```
 
 This matcher works the same way as `equal` matcher, so it accepts the same options.
@@ -102,7 +108,10 @@ $json = <<<EOD
 }
 EOD;
 
-$matcher($json)->havePath('collection/1');
+$matcher
+    ->setSubject($json)
+    ->havePath('collection/1')
+;
 ```
 
 ### haveSize
@@ -118,7 +127,10 @@ $json = <<<EOD
 }
 EOD;
 
-$matcher($json)->haveSize(2, ['at' => 'collection']);
+$matcher
+    ->setSubject($json)
+    ->haveSize(2, ['at' => 'collection'])
+;
 ```
 
 ### haveType
@@ -134,7 +146,8 @@ $json = <<<EOD
 }
 EOD;
 
-$matcher($json)
+$matcher
+    ->setSubject($json)
     ->haveType('array', ['at' => 'collection'])
     ->haveType('object', ['at' => 'collection/0'])
     ->haveType('string', ['at' => 'collection/1'])
@@ -146,7 +159,8 @@ $matcher($json)
 ### Negative matching
 To invert expectations just call matcher methods with `not` prefix:
 ```php
-$matcher($json)
+$matcher
+    ->setSubject($json)
     ->notEqual($expected)
     ->notIncludes($part)
 ;
@@ -164,5 +178,7 @@ $json = <<<EOD
 }
 EOD;
 $expected = '"item"';
-$matcher($actual)->equal($expected, ['at' => 'collection/0']);
+JsonMatcher::create($actual)
+    ->equal($expected, ['at' => 'collection/0'])
+;
 ```
