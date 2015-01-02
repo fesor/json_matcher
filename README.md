@@ -13,28 +13,41 @@ All this issues can be solved with two simple things: JSON normalization and key
 
 You can install this library via composer:
 ```
-composer require fesor/json_match
+composer require fesor/json_matcher
 ```
+
+Then you will need an `JsonMatcher` instance to be created. To do that, you have three possible options:
+ - manually create instance with all dependencies and set subject
+ - use JsonMatcherFactory. This is useful when you have some IoC container. In this case you'll need to register this class as a service.
+ - use named constructor `JsonMatcher::create` as shortcut. This method will handle all dependencies for you.
+
+Matchers should have a subject, on which matching will be performed. You can set subject via `setSubject` method. If you are using matcher factory or named constructor, then you don't have to call setSubject but you can change it with it.
+
+Example:
+```php
+$jsonResponseSubject = JsonMatcher::create($myJsonResponse);
+
+// or you can use factory instead
+$jsonResponseSubject = $matcherFactory->create($myJsonResponse);
+
+// and there you go, for example you may use something like this 
+// for your gherkin steps implementations
+$jsonResponseSubject
+    ->haveSize(1, ['at' => 'friends']) // check that list of friends was incremented
+    ->includes($friendJson, ['at' => 'friends']) // check that correct record contained in collection
+;
+```
+
+You can provide list of by-default excluded keys as second argument in constructors:
+```php
+$matcher = JsonMatcher::create($subject, ['id', 'created_at']);
+```
+
+Please not, that `id` key will be ignored by default.
 
 ## Matchers
 
-To create `JsonMatcher` instance all you need to do is just call named constructor `create`.
-
-```
-$matcher = JsonMatcher::create();
-```
-
-This named constructor also have some additional options. We'll back to them later.
-
-Also you can chain all matchers since they will throw an exception if JSON have incorrect data.
-
-```
-$matcher = JsonMatcher::create(['id']);
-$matcher($jsonResponse)
-    ->includes($userJson, ['at'=>'friends'])
-    ->haveSize(2, ['at' => 'friends'])
-;
-```
+All matchers are chainable, supports negative matching and some options. See detailed description for more information.
 
 ### equal
 This is most common matcher of all. You take two json strings and compares it. Except that before compassion this matcher will normalize structure of both JSON strings, will reorder keys, exclude some of them (this is configurable) and then will simply assert that both strings are equal. You can specify list of excluded keys with `excluding` options:

@@ -9,6 +9,16 @@ use Fesor\JsonMatcher\Exception\JsonTypeException;
 use Fesor\JsonMatcher\Helper\JsonHelper;
 use Seld\JsonLint\JsonParser;
 
+/**
+ * Class JsonMatcher
+ * @package Fesor\JsonMatcher
+ *
+ * @method $this notEqual() notEqual(string $expected, array $options=[])
+ * @method $this notHaveSize() notHaveSize(int $expectedSize, array $options=[])
+ * @method $this notHaveType() notHaveType(string $type, array $options=[])
+ * @method $this notHavePath() notHavePath(string $path, array $options=[])
+ * @method $this notIncludes() notIncludes(string $json, array $options=[])
+ */
 class JsonMatcher
 {
 
@@ -45,12 +55,16 @@ class JsonMatcher
     /**
      * Named constructor for simplify usage
      *
+     * @param  string      $subject
      * @param  array       $excludedKeys
      * @return JsonMatcher
      */
-    public static function create(array $excludedKeys = ['id'])
+    public static function create($subject, array $excludedKeys = ['id'])
     {
-        return new JsonMatcher(new JsonHelper(new JsonParser()), $excludedKeys);
+        $matcher = new JsonMatcher(new JsonHelper(new JsonParser()), $excludedKeys);
+        $matcher->setSubject($subject);
+        
+        return $matcher;
     }
 
     /**
@@ -163,7 +177,7 @@ class JsonMatcher
      * @param  string $subject
      * @return $this
      */
-    public function __invoke($subject)
+    public function setSubject($subject)
     {
         $this->subject = $subject;
 
