@@ -80,7 +80,7 @@ class JsonMatcher
             $options, [static::OPTION_PATH => null]
         ));
 
-        if (static::isPositive($options) xor $actual === $expected) {
+        if (static::isPositive($options) ^ $actual === $expected) {
             throw JsonEqualityException::create($options);
         }
 
@@ -121,7 +121,7 @@ class JsonMatcher
             throw new JsonSizeException('Can\'t get size of scalar JSON value');
         }
 
-        if ($this->isPositive($options) xor $expectedSize === count($data)) {
+        if ($this->isPositive($options) ^ $expectedSize === count($data)) {
             throw JsonSizeException::create($expectedSize, count($data), $options);
         }
 
@@ -142,7 +142,7 @@ class JsonMatcher
         }
 
         $actualType = gettype($data);
-        if ($this->isPositive($options) xor $actualType === $type) {
+        if ($this->isPositive($options) ^ $actualType === $type) {
             throw JsonTypeException::create($type, $actualType, $options);
         }
 
@@ -163,7 +163,7 @@ class JsonMatcher
         ));
 
         if (
-            $this->isPositive($options) xor $this->jsonHelper->isIncludes(
+            $this->isPositive($options) ^ $this->jsonHelper->isIncludes(
                 $this->jsonHelper->parse($actual), $expected
             )
         ) {
