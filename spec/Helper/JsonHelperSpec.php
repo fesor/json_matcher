@@ -62,7 +62,7 @@ class JsonHelperSpec extends ObjectBehavior
 
     function it_normalize_json()
     {
-        $normalizedJson = <<<EOD
+        $normalizedJson = <<<JSON
 {
     "json": "spec",
     "laser": {
@@ -70,7 +70,7 @@ class JsonHelperSpec extends ObjectBehavior
         "lemon": "orange"
     }
 }
-EOD;
+JSON;
 
         $this->normalize('{"laser":{"lemon": "orange", "banana": "watermelon"},"json":"spec"}')->shouldBe(rtrim($normalizedJson));
     }
@@ -97,25 +97,25 @@ EOD;
 
     function it_does_not_change_collection_order()
     {
-        $normalizedJson = <<<EOD
+        $normalizedJson = <<<JSON
 [
     "spec",
     "json"
 ]
-EOD;
+JSON;
 
         $this->generateNormalizedJson(['spec', 'json'])->shouldBe(rtrim($normalizedJson));
     }
 
     function it_generates_a_normalized_json_document()
     {
-        $normalizedJson = <<<EOD
+        $normalizedJson = <<<JSON
 {
     "json": [
         "spec"
     ]
 }
-EOD;
+JSON;
         $this->generateNormalizedJson((object) ['json'=>['spec']])->shouldBe(rtrim($normalizedJson));
     }
 
@@ -161,16 +161,16 @@ EOD;
             ]
         ];
 
-        $needle = <<<EOD
+        $needle = <<<JSON
 {
     "key": "value"
 }
-EOD;
-        $falseNeedle = <<<EOD
+JSON;
+        $falseNeedle = <<<JSON
 {
     "value": "key"
 }
-EOD;
+JSON;
 
 
         $this->isIncludes($obj, $needle)->shouldBe(true);
