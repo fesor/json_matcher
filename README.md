@@ -1,7 +1,7 @@
 Json Match
 ====================
 
-[![Latest Stable Version](https://poser.pugx.org/fesor/json_matcher/v/stable.svg)](https://packagist.org/packages/fesor/json_matcher) [![Total Downloads](https://poser.pugx.org/fesor/json_matcher/downloads.svg)](https://packagist.org/packages/fesor/json_matcher) [![Latest Unstable Version](https://poser.pugx.org/fesor/json_matcher/v/unstable.svg)](https://packagist.org/packages/fesor/json_matcher) [![License](https://poser.pugx.org/fesor/json_matcher/license.svg)](https://packagist.org/packages/fesor/json_matcher)[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fesor/json_matcher/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fesor/json_matcher/?branch=master)
+ [![Latest Stable Version](https://poser.pugx.org/fesor/json_matcher/v/stable.svg)](https://packagist.org/packages/fesor/json_matcher) [![Latest Unstable Version](https://poser.pugx.org/fesor/json_matcher/v/unstable.svg)](https://packagist.org/packages/fesor/json_matcher) [![License](https://poser.pugx.org/fesor/json_matcher/license.svg)](https://packagist.org/packages/fesor/json_matcher) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fesor/json_matcher/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fesor/json_matcher/?branch=master) [![Total Downloads](https://poser.pugx.org/fesor/json_matcher/downloads.svg)](https://packagist.org/packages/fesor/json_matcher)
 
 If you tried to test your JSON based REST APIs, then you probably faced a several issues:
 
