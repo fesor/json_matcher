@@ -1,6 +1,8 @@
 Json Match
 ====================
 
+[![Latest Stable Version](https://poser.pugx.org/fesor/json_matcher/v/stable.svg)](https://packagist.org/packages/fesor/json_matcher) [![Total Downloads](https://poser.pugx.org/fesor/json_matcher/downloads.svg)](https://packagist.org/packages/fesor/json_matcher) [![Latest Unstable Version](https://poser.pugx.org/fesor/json_matcher/v/unstable.svg)](https://packagist.org/packages/fesor/json_matcher) [![License](https://poser.pugx.org/fesor/json_matcher/license.svg)](https://packagist.org/packages/fesor/json_matcher)
+
 If you tried to test your JSON based REST APIs, then you probably faced a several issues:
 
 - You can't simply check is a response is equal to given string as there are things like server-generated IDs and timestamps.
