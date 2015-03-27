@@ -80,7 +80,7 @@ class JsonMatcher
             $options, [static::OPTION_PATH => null]
         ));
 
-        if (static::isPositive($options) ^ $actual === $expected) {
+        if ($this->isPositive($options) ^ $actual === $expected) {
             throw JsonEqualityException::create($options);
         }
 
