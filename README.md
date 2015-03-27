@@ -79,14 +79,14 @@ Also you can specify json path on which matching should be done via `at` options
 This matcher is pretty match the same as `equal` matcher except that is recursively scan given JSON and tries to find expected JSON in any values. This is useful for cases when you checking that some record exists in collection and you do not know or don't whant to know specific path to it.
 
 ```php
-$json = <<<EOD
+$json = <<<JSON
 {
     "collection": [
         "json",
         "matcher"
     ]
 }
-EOD;
+JSON;
 
 $needle = '"matcher"';
 $matcher
@@ -101,14 +101,14 @@ This matcher works the same way as `equal` matcher, so it accepts the same optio
 This matcher checks if given JSON have specific path ot not.
 
 ```php
-$json = <<<EOD
+$json = <<<JSON
 {
     "collection": [
         "json",
         "matcher"
     ]
 }
-EOD;
+JSON;
 
 $matcher
     ->setSubject($json)
@@ -120,14 +120,14 @@ $matcher
 This matcher checks is collection in given JSON contains specific amount of entities.
 
 ```php
-$json = <<<EOD
+$json = <<<JSON
 {
     "collection": [
         "json",
         "matcher"
     ]
 }
-EOD;
+JSON;
 
 $matcher
     ->setSubject($json)
@@ -137,7 +137,7 @@ $matcher
 
 ### haveType
 ```php
-$json = <<<EOD
+$json = <<<JSON
 {
     "collection": [
         {},
@@ -146,7 +146,7 @@ $json = <<<EOD
         13.45
     ]
 }
-EOD;
+JSON;
 
 $matcher
     ->setSubject($json)
@@ -172,13 +172,13 @@ $matcher
 Also all methods have option, which specifies path which should be performed matching. For example:
 
 ```php
-$json = <<<EOD
+$json = <<<JSON
 {
     "collection": [
         "item"
     ]
 }
-EOD;
+JSON;
 $expected = '"item"';
 JsonMatcher::create($actual)
     ->equal($expected, ['at' => 'collection/0'])
