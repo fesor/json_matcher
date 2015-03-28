@@ -1,4 +1,4 @@
-Json Match
+Json Matcher
 ====================
 
 [![Build Status](https://travis-ci.org/fesor/json_matcher.svg?branch=master)](https://travis-ci.org/fesor/json_matcher) 
@@ -7,6 +7,10 @@ Json Match
 [![License](https://poser.pugx.org/fesor/json_matcher/license.svg)](https://packagist.org/packages/fesor/json_matcher) 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fesor/json_matcher/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fesor/json_matcher/?branch=master) 
 [![Total Downloads](https://poser.pugx.org/fesor/json_matcher/downloads.svg)](https://packagist.org/packages/fesor/json_matcher)
+
+Library for simplifying data verification in your JSON structures. It test-framework agnostic so you can use in with PhpUnit or PhpSpec of whatever you like to use.
+
+## Abstract
 
 If you tried to test your JSON based REST APIs, then you probably faced a several issues:
 
@@ -189,3 +193,6 @@ JsonMatcher::create($actual)
     ->equal($expected, ['at' => 'collection/0'])
 ;
 ```
+## Contribution
+Please welcome to contribute! 
+
