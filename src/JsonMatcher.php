@@ -68,6 +68,8 @@ class JsonMatcher
     }
 
     /**
+     * Checks is given JSON equal to another one
+     *
      * @param  string $expected
      * @param  array  $options
      * @return $this
@@ -88,6 +90,8 @@ class JsonMatcher
     }
 
     /**
+     * Checks that given path exists in JSON
+     *
      * @param  string|null $path
      * @param  array       $options
      * @return $this
@@ -104,6 +108,8 @@ class JsonMatcher
     }
 
     /**
+     * Checks that given JSON have exact amount of items
+     *
      * @param  integer $expectedSize
      * @param  array   $options
      * @return $this
@@ -129,6 +135,8 @@ class JsonMatcher
     }
 
     /**
+     * Checks that given JSON at specific path have expected path
+     *
      * @param  string $type
      * @param  array  $options
      * @return $this
@@ -150,6 +158,8 @@ class JsonMatcher
     }
 
     /**
+     * Checks that given JSON presents in some collection or property
+     *
      * @param  string $json
      * @param  array  $options
      * @return $this
@@ -174,6 +184,8 @@ class JsonMatcher
     }
 
     /**
+     * Sets subject on which matching will be performed
+     *
      * @param  string $subject
      * @return $this
      */
@@ -185,6 +197,8 @@ class JsonMatcher
     }
 
     /**
+     * Negative matching
+     *
      * @param  string $name
      * @param  array  $arguments
      * @return $this
@@ -217,6 +231,8 @@ class JsonMatcher
     }
 
     /**
+     * Prepares JSON for matching
+     *
      * @param  string $json
      * @param  array  $options
      * @return string
@@ -231,11 +247,19 @@ class JsonMatcher
         );
     }
 
+    /**
+     * @param array $options
+     * @return null
+     */
     private function getPath(array $options)
     {
         return $this->option($options, static::OPTION_PATH, null);
     }
 
+    /**
+     * @param array $options
+     * @return array
+     */
     private function getExcludedKeys(array $options)
     {
         $excludedKeys = $this->option($options, static::OPTION_EXCLUDE_KEYS, []);
@@ -244,6 +268,12 @@ class JsonMatcher
         return array_diff(array_merge($this->excludeKeys, $excludedKeys), $includedKeys);
     }
 
+    /**
+     * @param array $options
+     * @param string $optionName
+     * @param mixed $default
+     * @return mixed
+     */
     private function option(array $options, $optionName, $default = null)
     {
         return array_key_exists($optionName, $options) ?
@@ -251,6 +281,10 @@ class JsonMatcher
         ;
     }
 
+    /**
+     * @param array $options
+     * @return bool
+     */
     private function isPositive(array $options)
     {
         return empty($options[self::OPTION_NEGATIVE]);
