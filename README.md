@@ -1,7 +1,12 @@
 Json Match
 ====================
 
-[![Build Status](https://travis-ci.org/fesor/json_matcher.svg?branch=master)](https://travis-ci.org/fesor/json_matcher) [![Latest Stable Version](https://poser.pugx.org/fesor/json_matcher/v/stable.svg)](https://packagist.org/packages/fesor/json_matcher) [![Latest Unstable Version](https://poser.pugx.org/fesor/json_matcher/v/unstable.svg)](https://packagist.org/packages/fesor/json_matcher) [![License](https://poser.pugx.org/fesor/json_matcher/license.svg)](https://packagist.org/packages/fesor/json_matcher) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fesor/json_matcher/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fesor/json_matcher/?branch=master) [![Total Downloads](https://poser.pugx.org/fesor/json_matcher/downloads.svg)](https://packagist.org/packages/fesor/json_matcher)
+[![Build Status](https://travis-ci.org/fesor/json_matcher.svg?branch=master)](https://travis-ci.org/fesor/json_matcher) 
+[![Latest Stable Version](https://poser.pugx.org/fesor/json_matcher/v/stable.svg)](https://packagist.org/packages/fesor/json_matcher) 
+[![Latest Unstable Version](https://poser.pugx.org/fesor/json_matcher/v/unstable.svg)](https://packagist.org/packages/fesor/json_matcher) 
+[![License](https://poser.pugx.org/fesor/json_matcher/license.svg)](https://packagist.org/packages/fesor/json_matcher) 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fesor/json_matcher/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fesor/json_matcher/?branch=master) 
+[![Total Downloads](https://poser.pugx.org/fesor/json_matcher/downloads.svg)](https://packagist.org/packages/fesor/json_matcher)
 
 If you tried to test your JSON based REST APIs, then you probably faced a several issues:
 
@@ -27,16 +32,16 @@ Matchers should have a subject, on which matching will be performed. You can set
 
 Example:
 ```php
-$jsonResponseSubject = JsonMatcher::create($myJsonResponse);
+$jsonResponse = JsonMatcher::create($response->getContent());
 
 // or you can use factory instead
-$jsonResponseSubject = $matcherFactory->create($myJsonResponse);
+$jsonResponse = $matcherFactory->create($response->getContent());
 
 // and there you go, for example you may use something like this 
 // for your gherkin steps implementations
-$jsonResponseSubject
-    ->haveSize(1, ['at' => 'friends']) // check that list of friends was incremented
-    ->includes($friendJson, ['at' => 'friends']) // check that correct record contained in collection
+$jsonResponse
+    ->haveSize(1, ['at' => 'friends']) // checks that list of friends was incremented
+    ->includes($friendJson, ['at' => 'friends']) // checks that correct record contained in collection
 ;
 ```
 
@@ -54,10 +59,10 @@ All matchers are chainable, supports negative matching and some options. See det
 ### equal
 This is most common matcher of all. You take two json strings and compares it. Except that before compassion this matcher will normalize structure of both JSON strings, will reorder keys, exclude some of them (this is configurable) and then will simply assert that both strings are equal. You can specify list of excluded keys with `excluding` options:
 ```php
-$jsonResponse = '["id": 1, "json": "spec"]';
+$actualJson = '["id": 1, "json": "spec"]';
 $expectedJson = '["json": "spec"]';
 $matcher
-    ->setSubject($jsonResponse)
+    ->setSubject($actualJson)
     ->equal($expectedJson, ['excluding' => ['id']])
 ;
 ```
@@ -69,7 +74,7 @@ $matcher = JsonMatcher::create($subject, ['id', 'created_at', 'updated_at']);
 
 If you want the values for these keys were taken into account during the matching, you can specify list of included keys with `including` options
 ```php
-$matcher = JsonMatcher::create($jsonResponse, ['id', 'created_at', 'updated_at']);
+$matcher = JsonMatcher::create($response->getContent(), ['id', 'created_at', 'updated_at']);
 $jsonResponseSubject->equal($expectedJson, ['including' => ['id']]);
 ```
 
@@ -172,7 +177,7 @@ $matcher
 Also all methods have option, which specifies path which should be performed matching. For example:
 
 ```php
-$json = <<<JSON
+$actual = <<<JSON
 {
     "collection": [
         "item"
