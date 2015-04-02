@@ -18,7 +18,7 @@ If you tried to test your JSON based REST APIs, then you probably faced a severa
 - Key ordering should be the same both for your API and for expected JSON.
 - Matching the whole responses breaks DRY for the spec
 
-All this issues can be solved with two simple things: JSON normalization and key exclusion on matching.
+All these issues can be solved with two simple things: JSON normalization and key exclusion on matching.
 
 ## Getting started
 
@@ -27,7 +27,7 @@ You can install this library via composer:
 composer require fesor/json_matcher
 ```
 
-Then you will need an `JsonMatcher` instance to be created. To do that, you have three possible options:
+Then you will need an `JsonMatcher` instance to be created. To do this, you can use one of three ways:
  - manually create instance with all dependencies and set subject
  - use JsonMatcherFactory. This is useful when you have some IoC container. In this case you'll need to register this class as a service.
  - use named constructor `JsonMatcher::create` as shortcut. This method will handle all dependencies for you.
@@ -54,14 +54,14 @@ You can provide list of by-default excluded keys as second argument in construct
 $matcher = JsonMatcher::create($subject, ['id', 'created_at']);
 ```
 
-Please not, that `id` key will be ignored by default.
+Please note, that `id` key will be ignored by default.
 
 ## Matchers
 
 All matchers are chainable, supports negative matching and some options. See detailed description for more information.
 
 ### equal
-This is most common matcher of all. You take two json strings and compares it. Except that before compassion this matcher will normalize structure of both JSON strings, will reorder keys, exclude some of them (this is configurable) and then will simply assert that both strings are equal. You can specify list of excluded keys with `excluding` options:
+This is most common matcher of all. You take two json strings and compare them. Except that before compassion this matcher will normalize structure of both JSON strings, will reorder keys, exclude some of them (this is configurable) and then will simply assert that both strings are equal. You can specify list of excluded keys with `excluding` options:
 ```php
 $actualJson = '["id": 1, "json": "spec"]';
 $expectedJson = '["json": "spec"]';
@@ -76,7 +76,7 @@ If you have some keys, which contains some time dependent value of some server-g
 $matcher = JsonMatcher::create($subject, ['id', 'created_at', 'updated_at']);
 ```
 
-If you want the values for these keys were taken into account during the matching, you can specify list of included keys with `including` options
+If you want the values for these keys to be taken into account during the matching, you can specify list of included keys with `including` options
 ```php
 $matcher = JsonMatcher::create($response->getContent(), ['id', 'created_at', 'updated_at']);
 $jsonResponseSubject->equal($expectedJson, ['including' => ['id']]);
@@ -85,7 +85,7 @@ $jsonResponseSubject->equal($expectedJson, ['including' => ['id']]);
 Also you can specify json path on which matching should be done via `at` options. We will back to this later since all matchers supports this option.
 
 ### includes
-This matcher is pretty match the same as `equal` matcher except that is recursively scan given JSON and tries to find expected JSON in any values. This is useful for cases when you checking that some record exists in collection and you do not know or don't whant to know specific path to it.
+This matcher is pretty match the same as `equal` matcher except that is recursively scan given JSON and tries to find expected JSON in any values. This is useful for cases when you checking that some record exists in collection and you do not know or don't want to know specific path to it.
 
 ```php
 $json = <<<JSON
@@ -104,7 +104,7 @@ $matcher
 ;
 ```
 
-This matcher works the same way as `equal` matcher, so it accepts the same options.
+This matcher works the same way as `equal` matcher, so it accepts same options.
 
 ### havePath
 This matcher checks if given JSON have specific path ot not.
