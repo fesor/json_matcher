@@ -8,7 +8,7 @@ Json Matcher
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fesor/json_matcher/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fesor/json_matcher/?branch=master) 
 [![Total Downloads](https://poser.pugx.org/fesor/json_matcher/downloads.svg)](https://packagist.org/packages/fesor/json_matcher)
 
-Library for simplifying data verification in your JSON structures. It test-framework agnostic so you can use in with PhpUnit or PhpSpec of whatever you like to use.
+Test-framework agnostic library for simplifying data verification in functional tests for your JSON-based APIs. You can use in with PhpUnit or PhpSpec of whatever you like to use.
 
 ## Abstract
 
