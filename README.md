@@ -44,7 +44,7 @@ $jsonResponse = $matcherFactory->create($response->getContent());
 // and there you go, for example you may use something like this 
 // for your gherkin steps implementations
 $jsonResponse
-    ->haveSize(1, ['at' => 'friends']) // checks that list of friends was incremented
+    ->hasSize(1, ['at' => 'friends']) // checks that list of friends was incremented
     ->includes($friendJson, ['at' => 'friends']) // checks that correct record contained in collection
 ;
 ```
@@ -106,7 +106,7 @@ $matcher
 
 This matcher works the same way as `equal` matcher, so it accepts same options.
 
-### havePath
+### hasPath
 This matcher checks if given JSON have specific path ot not.
 
 ```php
@@ -121,11 +121,11 @@ JSON;
 
 $matcher
     ->setSubject($json)
-    ->havePath('collection/1')
+    ->hasPath('collection/1')
 ;
 ```
 
-### haveSize
+### hasSize
 This matcher checks is collection in given JSON contains specific amount of entities.
 
 ```php
@@ -140,11 +140,11 @@ JSON;
 
 $matcher
     ->setSubject($json)
-    ->haveSize(2, ['at' => 'collection'])
+    ->hasSize(2, ['at' => 'collection'])
 ;
 ```
 
-### haveType
+### hasType
 ```php
 $json = <<<JSON
 {
@@ -159,11 +159,11 @@ JSON;
 
 $matcher
     ->setSubject($json)
-    ->haveType('array', ['at' => 'collection'])
-    ->haveType('object', ['at' => 'collection/0'])
-    ->haveType('string', ['at' => 'collection/1'])
-    ->haveType('integer', ['at' => 'collection/2'])
-    ->haveType('float', ['at' => 'collection/3'])
+    ->hasType('array', ['at' => 'collection'])
+    ->hasType('object', ['at' => 'collection/0'])
+    ->hasType('string', ['at' => 'collection/1'])
+    ->hasType('integer', ['at' => 'collection/2'])
+    ->hasType('float', ['at' => 'collection/3'])
 ;
 ```
 

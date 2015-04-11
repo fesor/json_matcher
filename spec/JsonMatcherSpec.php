@@ -143,89 +143,89 @@ class JsonMatcherSpec extends ObjectBehavior
     }
     //</editor-fold>
 
-    // <editor-fold desc="havePath spec">
+    // <editor-fold desc="hasPath spec">
     function it_matches_hash_keys()
     {
-        $this->setSubject(('{"one":{"two":{"three":4}}}'))->shouldNotThrow()->duringHavePath('one/two/three');
+        $this->setSubject(('{"one":{"two":{"three":4}}}'))->shouldNotThrow()->duringHasPath('one/two/three');
     }
 
     function it_does_not_match_values()
     {
-        $this->setSubject(('{"one":{"two":{"three":4}}}'))->shouldThrow(self::$missingPathException)->duringHavePath('one/two/three/4');
+        $this->setSubject(('{"one":{"two":{"three":4}}}'))->shouldThrow(self::$missingPathException)->duringHasPath('one/two/three/4');
     }
 
     function it_matches_array_indexes()
     {
-        $this->setSubject(('[1,[1,2,[1,2,3,4]]]'))->shouldNotThrow()->duringHavePath('1/2/3');
+        $this->setSubject(('[1,[1,2,[1,2,3,4]]]'))->shouldNotThrow()->duringHasPath('1/2/3');
     }
 
     function it_respects_null_array_values()
     {
-        $this->setSubject(('[null,[null,null,[null,null,null,null]]]'))->shouldNotThrow()->duringHavePath('1/2/3');
+        $this->setSubject(('[null,[null,null,[null,null,null,null]]]'))->shouldNotThrow()->duringHasPath('1/2/3');
     }
 
     function it_matches_hash_keys_and_array_indexes()
     {
-        $this->setSubject(('{"one":[1,2,{"three":4}]}'))->shouldNotThrow()->duringHavePath('one/2/three');
+        $this->setSubject(('{"one":[1,2,{"three":4}]}'))->shouldNotThrow()->duringHasPath('one/2/three');
     }
 
     function it_matches_hash_keys_with_given_base_path()
     {
-        $this->setSubject(('{"one":{"two":{"three":4}}}'))->shouldNotThrow()->duringHavePath('two/three', ['at' => 'one']);
+        $this->setSubject(('{"one":{"two":{"three":4}}}'))->shouldNotThrow()->duringHasPath('two/three', ['at' => 'one']);
     }
     //</editor-fold>
 
-    // <editor-fold desc="haveSize spec">
+    // <editor-fold desc="hasSize spec">
     function it_counts_array_entries()
     {
-        $this->setSubject(('[1,2,3]'))->shouldNotThrow()->duringHaveSize(3);
+        $this->setSubject(('[1,2,3]'))->shouldNotThrow()->duringHasSize(3);
     }
 
     function it_counts_null_array_entries()
     {
-        $this->setSubject(('[1,null,3]'))->shouldNotThrow()->duringHaveSize(3);
+        $this->setSubject(('[1,null,3]'))->shouldNotThrow()->duringHasSize(3);
     }
 
     function it_counts_hash_key_value_pairs()
     {
-        $this->setSubject(('{"one":1,"two":2,"three":3}'))->shouldNotThrow()->duringHaveSize(3);
+        $this->setSubject(('{"one":1,"two":2,"three":3}'))->shouldNotThrow()->duringHasSize(3);
     }
 
     function it_counts_null_hash_values()
     {
-        $this->setSubject(('{"one":1,"two":null,"three":3}'))->shouldNotThrow()->duringHaveSize(3);
+        $this->setSubject(('{"one":1,"two":null,"three":3}'))->shouldNotThrow()->duringHasSize(3);
     }
 
     function it_matches_size_at_a_path()
     {
-        $this->setSubject(('{"one":[1,2,3]}'))->shouldNotThrow()->duringHaveSize(3, ['at' => 'one']);
+        $this->setSubject(('{"one":[1,2,3]}'))->shouldNotThrow()->duringHasSize(3, ['at' => 'one']);
     }
 
     function it_cant_match_size_of_scalars()
     {
         $this->setSubject(('{"one":[1,2,3]}'))
             ->shouldThrow(self::$jsonSizeException)
-            ->duringHaveSize(3, ['at' => 'one/0'])
+            ->duringHasSize(3, ['at' => 'one/0'])
         ;
     }
     //</editor-fold>
 
-    // <editor-fold desc="haveType spec">
+    // <editor-fold desc="hasType spec">
     function it_matches_objects()
     {
-        $this->setSubject(('{}'))->shouldNotThrow()->duringHaveType('object');
+        $this->setSubject(('{}'))->shouldNotThrow()->duringHasType('object');
     }
 
     function it_matches_arrays()
     {
-        $this->setSubject(('[]'))->shouldNotThrow()->duringHaveType('array');
+        $this->setSubject(('[]'))->shouldNotThrow()->duringHasType('array');
     }
 
     function it_matches_type_at_a_path()
     {
         $this->setSubject(('{"root":[]}'))
             ->shouldNotThrow()
-            ->duringHaveType('array', [
+            ->duringHasType('array', [
                 'at' => 'root'
             ])
         ;
@@ -233,34 +233,34 @@ class JsonMatcherSpec extends ObjectBehavior
 
     function it_matches_strings()
     {
-        $this->setSubject(('["json_spec"]'))->shouldNotThrow()->duringHaveType('string', ['at' => '0']);
+        $this->setSubject(('["json_spec"]'))->shouldNotThrow()->duringHasType('string', ['at' => '0']);
     }
 
     function it_matches_a_valid_JSON_value_yet_invalid_JSON_document()
     {
-        $this->setSubject(('"json_spec"'))->shouldNotThrow()->duringHaveType('string');
+        $this->setSubject(('"json_spec"'))->shouldNotThrow()->duringHasType('string');
     }
 
     function it_matches_empty_strings()
     {
-        $this->setSubject(('""'))->shouldNotThrow()->duringHaveType('string');
+        $this->setSubject(('""'))->shouldNotThrow()->duringHasType('string');
     }
 
     function it_matches_integers()
     {
-        $this->setSubject(('10'))->shouldNotThrow()->duringHaveType('integer');
+        $this->setSubject(('10'))->shouldNotThrow()->duringHasType('integer');
     }
 
     function it_matches_floats()
     {
-        $this->setSubject(('10.0'))->shouldNotThrow()->duringHaveType('float');
-        $this->setSubject(('1e+1'))->shouldNotThrow()->duringHaveType('float');
+        $this->setSubject(('10.0'))->shouldNotThrow()->duringHasType('float');
+        $this->setSubject(('1e+1'))->shouldNotThrow()->duringHasType('float');
     }
 
     function it_matches_booleans()
     {
-        $this->setSubject(('true'))->shouldNotThrow()->duringHaveType('boolean');
-        $this->setSubject(('false'))->shouldNotThrow()->duringHaveType('boolean');
+        $this->setSubject(('true'))->shouldNotThrow()->duringHasType('boolean');
+        $this->setSubject(('false'))->shouldNotThrow()->duringHasType('boolean');
     }
     //</editor-fold>
 

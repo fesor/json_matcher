@@ -14,9 +14,9 @@ use Seld\JsonLint\JsonParser;
  * @package Fesor\JsonMatcher
  *
  * @method $this notEqual() notEqual(string $expected, array $options=[])
- * @method $this notHaveSize() notHaveSize(int $expectedSize, array $options=[])
- * @method $this notHaveType() notHaveType(string $type, array $options=[])
- * @method $this notHavePath() notHavePath(string $path, array $options=[])
+ * @method $this notHasSize() notHasSize(int $expectedSize, array $options=[])
+ * @method $this notHasType() notHasType(string $type, array $options=[])
+ * @method $this notHasPath() notHasPath(string $path, array $options=[])
  * @method $this notIncludes() notIncludes(string $json, array $options=[])
  */
 class JsonMatcher
@@ -96,7 +96,7 @@ class JsonMatcher
      * @param  array       $options
      * @return $this
      */
-    public function havePath($path, array $options = [])
+    public function hasPath($path, array $options = [])
     {
         // get base path
         $basePath = $this->getPath($options);
@@ -114,7 +114,7 @@ class JsonMatcher
      * @param  array   $options
      * @return $this
      */
-    public function haveSize($expectedSize, array $options = [])
+    public function hasSize($expectedSize, array $options = [])
     {
         $data = $this->jsonHelper->parse($this->subject, $this->getPath($options));
 
@@ -141,7 +141,7 @@ class JsonMatcher
      * @param  array  $options
      * @return $this
      */
-    public function haveType($type, array $options = [])
+    public function hasType($type, array $options = [])
     {
         $data = $this->jsonHelper->parse($this->subject, $this->getPath($options));
 
