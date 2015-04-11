@@ -249,7 +249,7 @@ class JsonMatcher
 
     /**
      * @param array $options
-     * @return null
+     * @return string|null
      */
     private function getPath(array $options)
     {
