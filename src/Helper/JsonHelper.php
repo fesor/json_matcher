@@ -159,7 +159,7 @@ class JsonHelper
 
             if ($data instanceof \stdClass && property_exists($data, $key)) {
                 $data = $data->$key;
-            } elseif (is_array($data) && preg_match('/^\d+$/', $key) && array_key_exists(intval($key), $data)) {
+            } elseif (is_array($data) && is_numeric($key) && array_key_exists((int) $key, $data)) {
                 $data = $data[$key];
             } else {
                 throw new MissingPathException($path);

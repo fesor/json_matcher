@@ -200,6 +200,16 @@ class JsonMatcherSpec extends ObjectBehavior
     {
         $this->setSubject(('{"one":[1,2,3]}'))->shouldNotThrow()->duringHasSize(3, ['at' => 'one']);
     }
+    
+    function it_fails_on_wrong_ammount_of_items()
+    {
+        $this->setSubject(('[1,null]'))->shouldThrow()->duringHasSize(3);
+    }
+    
+    function it_matches_size_in_nagative_scenarios()
+    {
+        $this->setSubject(('[1,null]'))->shouldNotThrow()->duringNotHasSize(3);
+    }
 
     function it_cant_match_size_of_scalars()
     {

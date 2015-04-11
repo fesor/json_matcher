@@ -18,7 +18,8 @@
     },
     "require-dev": {
       "phpspec/phpspec": "2.1.*@dev",
-      "fabpot/php-cs-fixer": "~0.5"
+      "fabpot/php-cs-fixer": "~0.5",
+        "henrikbjorn/phpspec-code-coverage": "~1.0"
     },
     "config": {
       "bin-dir": "bin"
