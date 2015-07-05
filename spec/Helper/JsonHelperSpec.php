@@ -4,15 +4,9 @@ namespace spec\Fesor\JsonMatcher\Helper;
 
 use Fesor\JsonMatcher\Exception\MissingPathException;
 use PhpSpec\ObjectBehavior;
-use Seld\JsonLint\JsonParser;
 
 class JsonHelperSpec extends ObjectBehavior
 {
-
-    function let()
-    {
-        $this->beConstructedWith(new JsonParser());
-    }
 
     function it_parses_json()
     {
