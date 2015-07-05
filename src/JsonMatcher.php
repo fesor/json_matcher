@@ -7,7 +7,6 @@ use Fesor\JsonMatcher\Exception\JsonIncludesException;
 use Fesor\JsonMatcher\Exception\JsonSizeException;
 use Fesor\JsonMatcher\Exception\JsonTypeException;
 use Fesor\JsonMatcher\Helper\JsonHelper;
-use Seld\JsonLint\JsonParser;
 
 /**
  * Class JsonMatcher
@@ -61,7 +60,7 @@ class JsonMatcher
      */
     public static function create($subject, array $excludedKeys = ['id'])
     {
-        $matcher = new JsonMatcher(new JsonHelper(new JsonParser()), $excludedKeys);
+        $matcher = new JsonMatcher(new JsonHelper(), $excludedKeys);
         $matcher->setSubject($subject);
         
         return $matcher;
