@@ -15,19 +15,6 @@ class JsonHelper
 {
 
     /**
-     * @var JsonParser
-     */
-    private $parser;
-
-    /**
-     * @param JsonParser $parser
-     */
-    public function __construct(JsonParser $parser)
-    {
-        $this->parser = $parser;
-    }
-
-    /**
      * Returns parsed JSON data or its part by given path
      *
      * @param  string      $json
@@ -36,7 +23,7 @@ class JsonHelper
      */
     public function parse($json, $path = null)
     {
-        $data = $this->parser->parse($json);
+        $data = $this->parseJson($json);
 
         if ($path === null) {
             
@@ -54,7 +41,14 @@ class JsonHelper
      */
     public function isValid($json)
     {
-        return null === $this->parser->lint($json);
+        try {
+            $this->parseJson($json);
+        } catch (\InvalidArgumentException $e) {
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -193,5 +187,19 @@ class JsonHelper
 
         return is_object($data) ?
             (object) $orderedData : $orderedData;
+    }
+
+    /**
+     * @param string $json
+     * @return mixed
+     */
+    private function parseJson($json)
+    {
+        $json = json_decode($json);
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new \InvalidArgumentException('Invalid JSON');
+        }
+
+        return $json;
     }
 }
