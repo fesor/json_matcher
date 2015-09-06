@@ -3,7 +3,6 @@
 namespace Fesor\JsonMatcher\Helper;
 
 use Fesor\JsonMatcher\Exception\MissingPathException;
-use Seld\JsonLint\JsonParser;
 
 /**
  * Class JsonHelper
