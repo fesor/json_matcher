@@ -2,11 +2,22 @@
 
 namespace spec\Fesor\JsonMatcher\Helper;
 
+use Fesor\JsonMatcher\Exception\JsonNotMatchesSchemaException;
 use Fesor\JsonMatcher\Exception\MissingPathException;
+use JsonSchema\Validator;
 use PhpSpec\ObjectBehavior;
 
 class JsonHelperSpec extends ObjectBehavior
 {
+
+    private $validator;
+
+    function let(Validator $jsonSchemaValidator)
+    {
+        $this->validator = $jsonSchemaValidator;
+
+        $this->beConstructedWith($jsonSchemaValidator);
+    }
 
     function it_parses_json()
     {
@@ -183,6 +194,19 @@ JSON;
         $this->isIncludes($obj, '"find"')->shouldBe(true);
         $this->isIncludes($obj, '"find me"')->shouldBe(true);
         $this->isIncludes($obj, '"not find me"')->shouldBe(false);
+    }
+
+    function it_validates_json_schema()
+    {
+        $errors = [[
+            'property' => 'prop',
+            'message' => 'message'
+        ]];
+        $this->validator->check('json', 'schema')->willReturn($errors);
+        $this->validator->getErrors()->willReturn($errors);
+        $this->validator->reset()->shouldBeCalled();
+
+        $this->validateJsonSchema('json', 'schema');
     }
 
 }

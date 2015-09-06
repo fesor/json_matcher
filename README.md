@@ -60,9 +60,9 @@ composer require fesor/json_matcher
 
 Then you will need an `JsonMatcher` instance to be created. To do this, you can:
 
- - manually create instance with all dependencies and set subject
  - use named constructor `JsonMatcher::create` as static factory-method. It will handle all dependencies for you.
  - use JsonMatcherFactory. This is useful when you have some IoC container in your test framework (Behat for example). In this case you'll need to register this class as a service.
+ - manually create instance with all dependencies and set subject
 
 Subject on which assertion will be preformed is setted up in matcher consturctor. If you want to reuse the same instance of matcher for every assertions, you can just change subject via `setSubject` method.
 
@@ -257,7 +257,6 @@ $matcher
 Supported options:
 
  - `at` - verify JSON Schema by given path.
- - `excluding` - exclude specific keys before matching. Please not that excluded-by-default are ignored here.
 
 ### Negative matching
 To invert expectations just call matcher methods with `not` prefix:
