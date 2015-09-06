@@ -343,6 +343,24 @@ class JsonMatcherSpec extends ObjectBehavior
         $json = '[{"id":1,"two":3}]';
         $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"two":3}');
     }
+
+    function it_matches_an_subset_included_in_a_hash()
+    {
+        $json = '{"id": 1, "name": "Foo"}';
+        $this->setSubject($json)->shouldNotThrow()->duringIncludes('{"name":"Foo"}');
+    }
+
+    function it_matches_an_subset_included_in_a_collection_of_hashes()
+    {
+        $json = '[{"id": 1, "name": "Foo"}, {"id": 2, "name": "Bar"}]';
+        $this->setSubject($json)->shouldNotThrow()->duringIncludes('{"name":"Bar"}');
+    }
+
+    function it_should_throw_exception_if_it_cant_find_subset_in_hash()
+    {
+        $json = '{"id": 1, "name": "Foo"}';
+        $this->setSubject($json)->shouldThrow()->duringIncludes('{"name":"Bar"}');
+    }
     // </editor-fold>
 
 }
