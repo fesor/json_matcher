@@ -85,26 +85,28 @@ $jsonResponseSubject->equal($expectedJson, ['including' => ['id']]);
 Also you can specify json path on which matching should be done via `at` options. We will back to this later since all matchers supports this option.
 
 ### includes
-This matcher is pretty match the same as `equal` matcher except that is recursively scan given JSON and tries to find expected JSON in any values. This is useful for cases when you checking that some record exists in collection and you do not know or don't want to know specific path to it.
+This matcher is pretty match the same as `equal` matcher except that is recursively scan given JSON and tries to find any inclusions of given JSON. This is useful for cases when you checking that some record exists in collection and you do not know or don't want to know specific path to it.
 
 ```php
 $json = <<<JSON
 {
+    "id": 1,
+    "name": "Foo",
     "collection": [
-        "json",
-        "matcher"
+        {"id": 1, "name": "Foo"},
+        {"id": 2, "name": "Bar"},
     ]
 }
 JSON;
 
-$needle = '"matcher"';
 $matcher
     ->setSubject($json)
-    ->includes($needle, ['at' => 'collection'])
+    ->includes('{"name": "Bar"}') // check for subset inclusion
+    ->includes('"Foo"', ['at' => 'collection']) // check for value inclusion
 ;
 ```
 
-This matcher works the same way as `equal` matcher, so it accepts same options.
+Since this matcher works the same way as `equal` matcher, it accepts same options.
 
 ### hasPath
 This matcher checks if given JSON have specific path ot not.
