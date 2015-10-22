@@ -6,6 +6,8 @@ use Fesor\JsonMatcher\Exception\JsonEqualityException;
 use Fesor\JsonMatcher\Exception\JsonIncludesException;
 use Fesor\JsonMatcher\Exception\JsonSizeException;
 use Fesor\JsonMatcher\Exception\JsonTypeException;
+use Fesor\JsonMatcher\Exception\MissingPathException;
+use Fesor\JsonMatcher\Exception\PathMatchException;
 use Fesor\JsonMatcher\Helper\JsonHelper;
 
 /**
@@ -95,13 +97,24 @@ class JsonMatcher
      * @param  array       $options
      * @return $this
      */
+
+
     public function hasPath($path, array $options = [])
     {
         // get base path
         $basePath = $this->getPath($options);
         $path = ltrim($basePath . '/' . $path, '/');
+        $pathExists = true;
+        try {
+            $this->jsonHelper->parse($this->subject, $path);
+        } catch(MissingPathException $e){
+            $pathExists = false;
 
-        $this->jsonHelper->parse($this->subject, $path);
+        }
+
+        if ($this->isPositive($options) ^ $pathExists) {
+            throw new PathMatchException($path, $options);
+        }
 
         return $this;
     }
