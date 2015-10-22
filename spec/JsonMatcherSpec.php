@@ -12,6 +12,7 @@ class JsonMatcherSpec extends ObjectBehavior
     
     private static $equalityException = 'Fesor\\JsonMatcher\\Exception\\JsonEqualityException';
     private static $missingPathException = 'Fesor\\JsonMatcher\\Exception\\MissingPathException';
+    private static $pathMatchException = 'Fesor\JsonMatcher\Exception\PathMatchException';
     private static $jsonTypeException = 'Fesor\\JsonMatcher\\Exception\\JsonTypeException';
     private static $jsonSizeException = 'Fesor\\JsonMatcher\\Exception\\JsonSizeException';
     private static $jsonIncludesException = 'Fesor\\JsonMatcher\\Exception\\JsonIncludesException';
@@ -151,7 +152,7 @@ class JsonMatcherSpec extends ObjectBehavior
 
     function it_does_not_match_values()
     {
-        $this->setSubject(('{"one":{"two":{"three":4}}}'))->shouldThrow(self::$missingPathException)->duringHasPath('one/two/three/4');
+        $this->setSubject(('{"one":{"two":{"three":4}}}'))->shouldThrow(self::$pathMatchException)->duringHasPath('one/two/three/4');
     }
 
     function it_matches_array_indexes()
@@ -172,6 +173,11 @@ class JsonMatcherSpec extends ObjectBehavior
     function it_matches_hash_keys_with_given_base_path()
     {
         $this->setSubject(('{"one":{"two":{"three":4}}}'))->shouldNotThrow()->duringHasPath('two/three', ['at' => 'one']);
+    }
+
+    function it_matches_that_json_path_not_exists()
+    {
+	$this->setSubject('{}')->shouldNotThrow()->duringNotHasPath('not_existing');
     }
     //</editor-fold>
 
