@@ -4,11 +4,13 @@ namespace Fesor\JsonMatcher;
 
 use Fesor\JsonMatcher\Exception\JsonEqualityException;
 use Fesor\JsonMatcher\Exception\JsonIncludesException;
+use Fesor\JsonMatcher\Exception\JsonNotMatchesSchemaException;
 use Fesor\JsonMatcher\Exception\JsonSizeException;
 use Fesor\JsonMatcher\Exception\JsonTypeException;
 use Fesor\JsonMatcher\Exception\MissingPathException;
 use Fesor\JsonMatcher\Exception\PathMatchException;
 use Fesor\JsonMatcher\Helper\JsonHelper;
+use JsonSchema\Validator;
 
 /**
  * Class JsonMatcher
@@ -62,7 +64,9 @@ class JsonMatcher
      */
     public static function create($subject, array $excludedKeys = ['id'])
     {
-        $matcher = new JsonMatcher(new JsonHelper(), $excludedKeys);
+        $matcher = new JsonMatcher(new JsonHelper(
+            new Validator()
+        ), $excludedKeys);
         $matcher->setSubject($subject);
         
         return $matcher;
@@ -193,6 +197,18 @@ class JsonMatcher
         }
 
         return $this;
+    }
+
+    public function matchesSchema($jsonSchema, array $options = [])
+    {
+        $options[self::OPTION_INCLUDE_KEYS] = [];
+        $options[self::OPTION_EXCLUDE_KEYS] = [];
+        $json = $this->scrub($this->subject, $options);
+
+        $errors = $this->jsonHelper->validateJsonSchema($json, $jsonSchema);
+        if ($this->isPositive($options) ^ empty($errors)) {
+            throw JsonNotMatchesSchemaException::create($errors, $options);
+        }
     }
 
     /**

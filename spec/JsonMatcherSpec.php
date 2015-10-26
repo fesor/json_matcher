@@ -2,10 +2,10 @@
 
 namespace spec\Fesor\JsonMatcher;
 
-use Fesor\JsonMatcher\Exception\JsonEqualityException;
-use \Fesor\JsonMatcher\Helper\JsonHelper;
+use Fesor\JsonMatcher\Exception\JsonNotMatchesSchemaException;
+use JsonSchema\Validator;
 use PhpSpec\ObjectBehavior;
-use Seld\JsonLint\JsonParser;
+use Prophecy\Argument;
 
 class JsonMatcherSpec extends ObjectBehavior
 {
@@ -17,9 +17,13 @@ class JsonMatcherSpec extends ObjectBehavior
     private static $jsonSizeException = 'Fesor\\JsonMatcher\\Exception\\JsonSizeException';
     private static $jsonIncludesException = 'Fesor\\JsonMatcher\\Exception\\JsonIncludesException';
 
-    function let()
+    private $schemaValidator;
+
+    function let(Validator $validator)
     {
-        $this->beConstructedWith(new JsonHelper(new JsonParser()), ['id']);
+        $this->schemaValidator = $validator;
+
+        $this->beConstructedWith($this->hackyCreateJsonHelper($validator), ['id']);
     }
 
     // <editor-fold desc="Negative matching">
@@ -369,4 +373,48 @@ class JsonMatcherSpec extends ObjectBehavior
     }
     // </editor-fold>
 
+    // <editor-fold desc="matchesSchema spec">
+    function it_matches_json_schema() {
+
+        $this->schemaValidationShouldBeCalled();
+        $this->setSubject('{"foo": "bar"}')->shouldNotThrow()->duringMatchesSchema('schema');
+    }
+
+    function it_matches_json_schema_by_given_path() {
+        $this->schemaValidationShouldBeCalled();
+        $this->setSubject('{"json": {"foo": "bar"}}')->shouldNotThrow()->duringMatchesSchema('schema', ['at' => 'json']);
+    }
+
+    function it_throws_exception_in_case_of_invalid_json() {
+        $errors = [
+            [
+                'property' => 'prop',
+                'message' => 'error'
+            ]
+        ];
+        $this->schemaValidationShouldBeCalled($errors);
+        $this->setSubject('{"bar": "foo"}')->shouldThrow(
+            JsonNotMatchesSchemaException::create($errors, [])
+        )->duringMatchesSchema('schema');
+    }
+    // </editor-fold>
+
+    private function schemaValidationShouldBeCalled(array $errors = [])
+    {
+        $this->schemaValidator->check(Argument::type('string'), 'schema')->shouldBeCalled();
+        $this->schemaValidator->getErrors()->willReturn($errors);
+        $this->schemaValidator->reset()->shouldBeCalled();
+    }
+
+    private function hackyCreateJsonHelper($validator)
+    {
+        $validator = $validator->getWrappedObject();
+        $helperReflection = new \ReflectionClass('Fesor\JsonMatcher\Helper\JsonHelper');
+        $instance = $helperReflection->newInstanceWithoutConstructor();
+        $validatorProperty = new \ReflectionProperty('Fesor\JsonMatcher\Helper\JsonHelper', 'schemaValidator');
+        $validatorProperty->setAccessible(true);
+        $validatorProperty->setValue($instance, $validator);
+
+        return $instance;
+    }
 }

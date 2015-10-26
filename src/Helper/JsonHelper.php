@@ -3,7 +3,7 @@
 namespace Fesor\JsonMatcher\Helper;
 
 use Fesor\JsonMatcher\Exception\MissingPathException;
-use Seld\JsonLint\JsonParser;
+use JsonSchema\Validator;
 
 /**
  * Class JsonHelper
@@ -13,6 +13,13 @@ use Seld\JsonLint\JsonParser;
  */
 class JsonHelper
 {
+
+    private $schemaValidator;
+
+    public function __construct(Validator $schemaValidator)
+    {
+        $this->schemaValidator = $schemaValidator;
+    }
 
     /**
      * Returns parsed JSON data or its part by given path
@@ -201,5 +208,14 @@ class JsonHelper
         }
 
         return $json;
+    }
+
+    public function validateJsonSchema($json, $schema)
+    {
+        $this->schemaValidator->check($json, $schema);
+        $errors = $this->schemaValidator->getErrors();
+        $this->schemaValidator->reset();
+
+        return $errors;
     }
 }

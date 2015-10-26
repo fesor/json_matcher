@@ -60,9 +60,9 @@ composer require fesor/json_matcher
 
 Then you will need an `JsonMatcher` instance to be created. To do this, you can:
 
- - manually create instance with all dependencies and set subject
  - use named constructor `JsonMatcher::create` as static factory-method. It will handle all dependencies for you.
  - use JsonMatcherFactory. This is useful when you have some IoC container in your test framework (Behat for example). In this case you'll need to register this class as a service.
+ - manually create instance with all dependencies and set subject
 
 Subject on which assertion will be preformed is setted up in matcher consturctor. If you want to reuse the same instance of matcher for every assertions, you can just change subject via `setSubject` method.
 
@@ -204,6 +204,59 @@ $matcher
     ->hasType('float', ['at' => 'collection/3'])
 ;
 ```
+
+### matchesSchema
+
+`hasPath` and `hasType` matchers provide you a simple way to verify JSON structure. But if you want to verify large part of JSON or event hole structure with this matchers, it can be quite tedious. What can be used instead is [Json Schema](http://json-schema.org/) and this matcher allows you to verify JSON or it part on schema matching.
+
+```php
+$schema = <<<JSONSCHEMA
+{
+	"title": "User json representation",
+	"type": "object",
+	"properties": {
+		"firstName": {
+			"type": "string"
+		},
+		"last_name": {
+			"type": "string"
+		},
+		"created_at": {
+			"description": "Date in ISO-8601 format",
+			"type": "string"
+		}
+	},
+	"required": ["first_name", "last_name"]
+}
+JSONSCHEMA;
+
+$json = <<<JSON
+{
+    "first_name": "Alice",
+    "last_name": "Miller",
+    "created_at": "2015-09-02T00:00:00+00:00"
+}
+JSON;
+
+$matcher
+  ->setSubject($json)
+  ->matchesSchema($schema);
+```
+
+Json schema is quite verbose, and you probably want to store it in separate files. Also you can use things like [RAML](http://raml.org/) or [api-blueprint](https://apiblueprint.org/) to generate schemas for responses in your functional tests from API documentation. But currently `JsonMatcher` doesn't provide you an API to load files since you can do that via very different ways. What is suggested is to create separate function to load schema file and return it's contents:
+
+```
+function fromFile($fileName) {
+    return file_get_contents(sprintf('file://%s/%s', __DIR__ . '/../support/schema', $fileName));
+}
+
+$matcher
+  ->matchesSchema(fromFile('users_schema.json'));
+```
+
+Supported options:
+
+ - `at` - verify JSON Schema by given path.
 
 ### Negative matching
 To invert expectations just call matcher methods with `not` prefix:
