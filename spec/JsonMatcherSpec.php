@@ -4,6 +4,7 @@ namespace spec\Fesor\JsonMatcher;
 
 use Fesor\JsonMatcher\Exception\JsonEqualityException;
 use \Fesor\JsonMatcher\Helper\JsonHelper;
+use Fesor\JsonMatcher\JsonMatcher;
 use PhpSpec\ObjectBehavior;
 use Seld\JsonLint\JsonParser;
 
@@ -23,25 +24,9 @@ class JsonMatcherSpec extends ObjectBehavior
     }
 
     // <editor-fold desc="Negative matching">
-    function it_supports_negative_matching()
+    function it_allows_to_invert_matching()
     {
-        $json = '{"json": "spec"}';
-        $this->setSubject($json)->shouldThrow(self::$equalityException)->duringNotEqual($json);
-    }
-
-    function it_checks_is_matcher_supported()
-    {
-        $this->shouldThrow(new \RuntimeException('Matcher "match" not supported'))->duringNotMatch();
-    }
-
-    function it_checks_is_method_exists()
-    {
-        $this->shouldThrow(new \RuntimeException('Method "match" not exists'))->duringMatch();
-    }
-
-    function it_validates_argument_count()
-    {
-        $this->shouldThrow(new \RuntimeException('Matcher requires at least one argument'))->duringNotEqual();
+        $this->not()->shouldReturnAnInstanceOf('Fesor\\JsonMatcher\\InvertedJsonMatcher');
     }
     // </editor-fold>
 
@@ -53,7 +38,9 @@ class JsonMatcherSpec extends ObjectBehavior
 
     function it_matches_not_identical_JSON_for_nagetive_matching()
     {
-        $this->setSubject(('{"json":"spec"}'))->shouldNotThrow()->duringNotEqual('{"spec":"json"}');
+        $this->setSubject(('{"json":"spec"}'))->shouldNotThrow()->duringEqual('{"spec":"json"}', [
+            JsonMatcher::OPTION_NEGATIVE => true
+        ]);
     }
 
     function it_matches_differently_formatted_JSON()
@@ -73,7 +60,9 @@ class JsonMatcherSpec extends ObjectBehavior
 
     function it_does_match_out_of_order_arrays_on_negative()
     {
-        $this->setSubject(('["json","spec"]'))->shouldNotThrow()->duringNotEqual('["spec", "json"]');
+        $this->setSubject(('["json","spec"]'))->shouldNotThrow()->duringEqual('["spec", "json"]', [
+            JsonMatcher::OPTION_NEGATIVE => true
+        ]);
     }
 
     function it_matches_valid_JSON_values_yet_invalid_JSON_documents()
@@ -177,7 +166,9 @@ class JsonMatcherSpec extends ObjectBehavior
 
     function it_matches_that_json_path_not_exists()
     {
-	$this->setSubject('{}')->shouldNotThrow()->duringNotHasPath('not_existing');
+	    $this->setSubject('{}')->shouldNotThrow()->duringHasPath('not_existing', [
+            JsonMatcher::OPTION_NEGATIVE => true
+        ]);
     }
     //</editor-fold>
 
@@ -214,7 +205,9 @@ class JsonMatcherSpec extends ObjectBehavior
     
     function it_matches_size_in_nagative_scenarios()
     {
-        $this->setSubject(('[1,null]'))->shouldNotThrow()->duringNotHasSize(3);
+        $this->setSubject(('[1,null]'))->shouldNotThrow()->duringHasSize(3, [
+            JsonMatcher::OPTION_NEGATIVE => true
+        ]);
     }
 
     function it_cant_match_size_of_scalars()
@@ -277,6 +270,15 @@ class JsonMatcherSpec extends ObjectBehavior
     {
         $this->setSubject(('true'))->shouldNotThrow()->duringHasType('boolean');
         $this->setSubject(('false'))->shouldNotThrow()->duringHasType('boolean');
+    }
+
+    function it_throws_exceptions_if_type_not_matches() {
+        $this->setSubject(('false'))->shouldThrow()->duringHasType('number');
+    }
+    function it_supports_negative_matching() {
+        $this->setSubject(('false'))->shouldNotThrow()->duringHasType('number', [
+            JsonMatcher::OPTION_NEGATIVE => true
+        ]);
     }
     //</editor-fold>
 
