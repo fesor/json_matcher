@@ -10,7 +10,8 @@
     ],
     "minimum-stability": "stable",
     "autoload": {
-      "psr-4": {"Fesor\\JsonMatcher\\": "src/", "spec\\Fesor\\JsonMatcher\\": "spec/"}
+      "psr-4": {"Fesor\\JsonMatcher\\": "src/", "spec\\Fesor\\JsonMatcher\\": "spec/"},
+      "files": ["src/functions.php"]
     },
     "require": {
       "php": ">=5.4.0"
