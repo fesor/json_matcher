@@ -74,7 +74,7 @@ class JsonMatcher implements JsonMatcherInterface
      * @param  array  $options
      * @return $this
      */
-    public function equal($expected, array $options = [])
+    public function equals($expected, array $options = [])
     {
         $actual = $this->scrub($this->subject, $options);
         $expected = $this->scrub($expected, array_diff_key(
