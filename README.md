@@ -206,12 +206,22 @@ $matcher
 ```
 
 ### Negative matching
-To invert expectations just call matcher methods with `not` prefix:
+To invert expectations just call `not` method and them use matcher what you want:
 ```php
 $matcher
     ->setSubject($json)
-    ->notEqual($expected)
-    ->notIncludes($part)
+    ->not()->equal($expected)
+    ->not()->includes($part)
+;
+```
+
+Please note that result inversion works only once for single matcher:
+
+```php
+$matcher
+    ->setSubject($json)
+    ->not()->equal($expected)   // negative
+    ->ncludes($part)            // positive
 ;
 ```
 

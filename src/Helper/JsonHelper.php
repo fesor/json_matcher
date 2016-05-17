@@ -41,14 +41,9 @@ class JsonHelper
      */
     public function isValid($json)
     {
-        try {
-            $this->parseJson($json);
-        } catch (\InvalidArgumentException $e) {
+        json_decode($json);
 
-            return false;
-        }
-
-        return true;
+        return $this->isJsonParsedCorrectly();
     }
 
     /**
@@ -196,10 +191,15 @@ class JsonHelper
     private function parseJson($json)
     {
         $json = json_decode($json);
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new \InvalidArgumentException('Invalid JSON');
+        if (!$this->isJsonParsedCorrectly()) {
+            throw new \InvalidArgumentException('Unable to parse JSON');
         }
 
         return $json;
+    }
+
+    private function isJsonParsedCorrectly()
+    {
+        return JSON_ERROR_NONE === json_last_error();
     }
 }

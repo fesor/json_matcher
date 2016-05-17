@@ -13,14 +13,8 @@ use Fesor\JsonMatcher\Helper\JsonHelper;
 /**
  * Class JsonMatcher
  * @package Fesor\JsonMatcher
- *
- * @method $this notEqual() notEqual(string $expected, array $options=[])
- * @method $this notHasSize() notHasSize(int $expectedSize, array $options=[])
- * @method $this notHasType() notHasType(string $type, array $options=[])
- * @method $this notHasPath() notHasPath(string $path, array $options=[])
- * @method $this notIncludes() notIncludes(string $json, array $options=[])
  */
-class JsonMatcher
+class JsonMatcher implements JsonMatcherInterface
 {
 
     const OPTION_PATH = 'at';
@@ -68,6 +62,11 @@ class JsonMatcher
         return $matcher;
     }
 
+    public function not()
+    {
+        return new InvertedJsonMatcher($this);
+    }
+
     /**
      * Checks is given JSON equal to another one
      *
@@ -75,7 +74,7 @@ class JsonMatcher
      * @param  array  $options
      * @return $this
      */
-    public function equal($expected, array $options = [])
+    public function equals($expected, array $options = [])
     {
         $actual = $this->scrub($this->subject, $options);
         $expected = $this->scrub($expected, array_diff_key(
@@ -206,40 +205,6 @@ class JsonMatcher
         $this->subject = $subject;
 
         return $this;
-    }
-
-    /**
-     * Negative matching
-     *
-     * @param  string $name
-     * @param  array  $arguments
-     * @return $this
-     */
-    public function __call($name, array $arguments = [])
-    {
-        if (0 !== strpos($name, 'not')) {
-            throw new \RuntimeException(sprintf('Method "%s" not exists', $name));
-        }
-
-        $matcher = lcfirst(substr($name, 3));
-        if (!method_exists($this, $matcher)) {
-            throw new \RuntimeException(sprintf('Matcher "%s" not supported', $matcher));
-        }
-
-        if (count($arguments) < 1) {
-            throw new \RuntimeException('Matcher requires at least one argument');
-        }
-
-        $options = array_pop($arguments);
-        if (!is_array($options)) {
-            array_push($arguments, $options);
-            $options = [];
-        }
-
-        $options[self::OPTION_NEGATIVE] = true;
-        array_push($arguments, $options);
-
-        return !call_user_func_array([$this, $matcher], $arguments);
     }
 
     /**
