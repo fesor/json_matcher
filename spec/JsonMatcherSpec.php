@@ -4,6 +4,7 @@ namespace spec\Fesor\JsonMatcher;
 
 use Fesor\JsonMatcher\Exception\JsonEqualityException;
 use \Fesor\JsonMatcher\Helper\JsonHelper;
+use Fesor\JsonMatcher\JsonSchema\JsonSchemaGenerator;
 use PhpSpec\ObjectBehavior;
 use Seld\JsonLint\JsonParser;
 
@@ -19,7 +20,7 @@ class JsonMatcherSpec extends ObjectBehavior
 
     function let()
     {
-        $this->beConstructedWith(new JsonHelper(new JsonParser()), ['id']);
+        $this->beConstructedWith(['id'], new JsonHelper(), new JsonSchemaGenerator());
     }
 
     // <editor-fold desc="Negative matching">
@@ -368,5 +369,29 @@ class JsonMatcherSpec extends ObjectBehavior
         $this->setSubject($json)->shouldThrow()->duringIncludes('{"name":"Bar"}');
     }
     // </editor-fold>
+
+    function it_passess_if_json_matches_schema()
+    {
+        $json = '["test"]';
+        $this->setSubject($json)->shouldNotThrow()->duringMatches('string[]');
+    }
+
+    function it_fails_if_json_not_matchies_schema()
+    {
+        $json = '[42, "12"]';
+        $this->setSubject($json)->shouldThrow()->duringMatches('string[]');
+    }
+
+    function it_passess_if_json_not_matchies_schema_for_negative_matching()
+    {
+        $json = '[42, "12"]';
+        $this->setSubject($json)->shouldNotThrow()->duringNotMatches('string[]');
+    }
+
+    function it_fails_if_json_matchies_schema_for_negative_matching()
+    {
+        $json = '["test"]';
+        $this->setSubject($json)->shouldThrow()->duringNotMatches('string[]');
+    }
 
 }

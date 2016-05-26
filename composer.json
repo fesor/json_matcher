@@ -10,15 +10,18 @@
     ],
     "minimum-stability": "stable",
     "autoload": {
-      "psr-4": {"Fesor\\JsonMatcher\\": "src/", "spec\\Fesor\\JsonMatcher\\": "spec/"}
+      "psr-4": {"Fesor\\JsonMatcher\\": "src/", "spec\\Fesor\\JsonMatcher\\": "spec/"},
+      "files": ["src/functions.php"]
     },
     "require": {
-      "php": ">=5.4.0"
+      "php": ">=5.5.0",
+        "justinrainbow/json-schema": "~2.0"
     },
     "require-dev": {
-      "phpspec/phpspec": "2.1.*@dev",
+      "phpspec/phpspec": "~2.1",
       "fabpot/php-cs-fixer": "~0.5",
-      "henrikbjorn/phpspec-code-coverage": "~1.0"
+      "henrikbjorn/phpspec-code-coverage": "~1.0",
+        "peridot-php/leo": "~1.0"
     },
     "config": {
       "bin-dir": "bin"

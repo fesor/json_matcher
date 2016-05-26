@@ -4,11 +4,14 @@ namespace Fesor\JsonMatcher;
 
 use Fesor\JsonMatcher\Exception\JsonEqualityException;
 use Fesor\JsonMatcher\Exception\JsonIncludesException;
+use Fesor\JsonMatcher\Exception\JsonSchemaDoesntMatchException;
 use Fesor\JsonMatcher\Exception\JsonSizeException;
 use Fesor\JsonMatcher\Exception\JsonTypeException;
 use Fesor\JsonMatcher\Exception\MissingPathException;
 use Fesor\JsonMatcher\Exception\PathMatchException;
 use Fesor\JsonMatcher\Helper\JsonHelper;
+use Fesor\JsonMatcher\JsonSchema\JsonSchemaGenerator;
+use JsonSchema\Validator;
 
 /**
  * Class JsonMatcher
@@ -34,6 +37,11 @@ class JsonMatcher
     private $jsonHelper;
 
     /**
+     * @var JsonSchemaGenerator
+     */
+    private $schemaGenerator;
+
+    /**
      * @var array
      */
     private $excludeKeys;
@@ -44,13 +52,24 @@ class JsonMatcher
     private $subject;
 
     /**
-     * @param JsonHelper $jsonHelper
-     * @param array      $excludeKeys
+     * @var bool
      */
-    public function __construct(JsonHelper $jsonHelper, array $excludeKeys = [])
+    private $inverted;
+
+    /**
+     * @param array      $excludeKeys
+     * @param JsonHelper $jsonHelper
+     * @param JsonSchemaGenerator $schemaGenerator
+     */
+    public function __construct(
+        array $excludeKeys = [],
+        JsonHelper $jsonHelper = null,
+        JsonSchemaGenerator $schemaGenerator = null
+    )
     {
-        $this->jsonHelper = $jsonHelper;
         $this->excludeKeys = $excludeKeys;
+        $this->jsonHelper = $jsonHelper ?: new JsonHelper();
+        $this->schemaGenerator = $schemaGenerator ?: new JsonSchemaGenerator();
     }
 
     /**
@@ -62,7 +81,7 @@ class JsonMatcher
      */
     public static function create($subject, array $excludedKeys = ['id'])
     {
-        $matcher = new JsonMatcher(new JsonHelper(), $excludedKeys);
+        $matcher = new JsonMatcher($excludedKeys);
         $matcher->setSubject($subject);
         
         return $matcher;
@@ -193,6 +212,24 @@ class JsonMatcher
         }
 
         return $this;
+    }
+
+    public function matches($schema, array $options = [])
+    {
+        $data = $this->jsonHelper->parse($this->subject, $this->getPath($options));
+        $jsonSchema = _resolveSchema($this->schemaGenerator->generateSchema($schema));
+
+        $validator = new Validator();
+        $validator->check($data, $jsonSchema);
+
+        $errors = [];
+        if (!$validator->isValid()) {
+            $errors = $validator->getErrors();
+        }
+
+        if ($this->isPositive($options) ^ empty($errors)) {
+            throw JsonSchemaDoesntMatchException::create($options, $errors);
+        }
     }
 
     /**
