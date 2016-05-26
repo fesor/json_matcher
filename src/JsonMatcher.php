@@ -52,6 +52,11 @@ class JsonMatcher
     private $subject;
 
     /**
+     * @var bool
+     */
+    private $inverted;
+
+    /**
      * @param array      $excludeKeys
      * @param JsonHelper $jsonHelper
      * @param JsonSchemaGenerator $schemaGenerator
