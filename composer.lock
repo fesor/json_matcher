@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bb851c104dd555760012d211c177c28c",
-    "content-hash": "8ce369112e69313a506e2c5b58105c80",
+    "hash": "8b900281320dd2a093c0a2a5a43befa3",
+    "content-hash": "53907ac6a7907f2f600e343ea2e7926c",
     "packages": [
         {
             "name": "justinrainbow/json-schema",
@@ -217,6 +217,57 @@
             ],
             "description": "Integrates CodeCoverage with PhpSpec",
             "time": "2014-12-11 11:43:15"
+        },
+        {
+            "name": "peridot-php/leo",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/peridot-php/leo.git",
+                "reference": "5ff1a9481faa37a55f5c6569379858dca01312f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/peridot-php/leo/zipball/5ff1a9481faa37a55f5c6569379858dca01312f6",
+                "reference": "5ff1a9481faa37a55f5c6569379858dca01312f6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "peridot-php/peridot-jumpstart": "~1.0",
+                "peridot-php/peridot-prophecy-plugin": "~1.0",
+                "satooshi/php-coveralls": "~0.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Peridot\\Leo\\": "src/"
+                },
+                "files": [
+                    "src/Interfaces/_interface.bdd.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brian Scaturro",
+                    "email": "scaturrob@gmail.com"
+                }
+            ],
+            "description": "Next level assertion and matcher library for PHP",
+            "keywords": [
+                "assert",
+                "expect",
+                "expectation",
+                "matcher",
+                "testing"
+            ],
+            "time": "2016-03-02 04:33:43"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
