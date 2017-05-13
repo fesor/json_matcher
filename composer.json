@@ -16,7 +16,7 @@
       "psr-4": {"spec\\Fesor\\JsonMatcher\\": "spec/"}
     },
     "require": {
-      "php": ">=5.4.0"
+      "php": ">=7.0.1"
     },
     "require-dev": {
       "phpspec/phpspec": "^3.3",
