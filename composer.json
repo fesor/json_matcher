@@ -19,8 +19,9 @@
       "php": ">=5.4.0"
     },
     "require-dev": {
-      "fabpot/php-cs-fixer": "~0.5",
-        "phpspec/phpspec": "^3.3"
+      "phpspec/phpspec": "^3.3",
+      "leanphp/phpspec-code-coverage": "^3.1",
+      "friendsofphp/php-cs-fixer": "^2.3"
     },
     "config": {
       "bin-dir": "bin"
