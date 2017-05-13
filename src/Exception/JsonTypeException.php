@@ -2,15 +2,13 @@
 
 namespace Fesor\JsonMatcher\Exception;
 
-use Fesor\JsonMatcher\JsonMatcher;
-
 class JsonTypeException extends MatchException
 {
-
     /**
-     * @param  string $expectedType
-     * @param  string $actualType
-     * @param  array  $options
+     * @param string $expectedType
+     * @param string $actualType
+     * @param array  $options
+     *
      * @return static
      */
     public static function create($expectedType, $actualType, array $options)
@@ -23,5 +21,4 @@ class JsonTypeException extends MatchException
 
         return new static($message);
     }
-
 }

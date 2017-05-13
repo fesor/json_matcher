@@ -2,13 +2,11 @@
 
 namespace Fesor\JsonMatcher\Exception;
 
-use Fesor\JsonMatcher\JsonMatcher;
-
 class JsonIncludesException extends MatchException
 {
-
     /**
-     * @param  array  $options
+     * @param array $options
+     *
      * @return static
      */
     public static function create(array $options)
@@ -21,5 +19,4 @@ class JsonIncludesException extends MatchException
 
         return new static(sprintf($message, self::getAt($options)));
     }
-
 }
