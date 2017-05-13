@@ -2,10 +2,8 @@
 
 namespace spec\Fesor\JsonMatcher;
 
-use Fesor\JsonMatcher\Exception\JsonEqualityException;
-use \Fesor\JsonMatcher\Helper\JsonHelper;
+use Fesor\JsonMatcher\JsonHelper;
 use PhpSpec\ObjectBehavior;
-use Seld\JsonLint\JsonParser;
 
 class JsonMatcherSpec extends ObjectBehavior
 {
@@ -19,7 +17,7 @@ class JsonMatcherSpec extends ObjectBehavior
 
     function let()
     {
-        $this->beConstructedWith(new JsonHelper(new JsonParser()), ['id']);
+        $this->beConstructedWith(new JsonHelper(), ['id']);
     }
 
     // <editor-fold desc="Negative matching">

@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Fesor\JsonMatcher\Helper;
+namespace spec\Fesor\JsonMatcher;
 
 use Fesor\JsonMatcher\Exception\MissingPathException;
 use PhpSpec\ObjectBehavior;

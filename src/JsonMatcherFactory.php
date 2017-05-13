@@ -2,8 +2,6 @@
 
 namespace Fesor\JsonMatcher;
 
-use Fesor\JsonMatcher\Helper\JsonHelper;
-
 class JsonMatcherFactory
 {
 

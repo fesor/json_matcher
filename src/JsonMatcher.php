@@ -8,7 +8,6 @@ use Fesor\JsonMatcher\Exception\JsonSizeException;
 use Fesor\JsonMatcher\Exception\JsonTypeException;
 use Fesor\JsonMatcher\Exception\MissingPathException;
 use Fesor\JsonMatcher\Exception\PathMatchException;
-use Fesor\JsonMatcher\Helper\JsonHelper;
 
 /**
  * Class JsonMatcher

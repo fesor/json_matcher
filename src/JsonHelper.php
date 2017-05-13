@@ -1,6 +1,6 @@
 <?php
 
-namespace Fesor\JsonMatcher\Helper;
+namespace Fesor\JsonMatcher;
 
 use Fesor\JsonMatcher\Exception\MissingPathException;
 use Seld\JsonLint\JsonParser;
@@ -13,6 +13,7 @@ use Seld\JsonLint\JsonParser;
  */
 class JsonHelper
 {
+    const NORMALIZED_JSON_OPTIONS = JSON_PRETTY_PRINT;
 
     /**
      * Returns parsed JSON data or its part by given path
@@ -106,8 +107,16 @@ class JsonHelper
     {
         return rtrim(json_encode(
             $this->sortObjectKeys($data),
-            JSON_PRETTY_PRINT
+            self::NORMALIZED_JSON_OPTIONS
         ));
+    }
+
+    public function excludeKeysFromJson(string $json, array $excludedKeys = [])
+    {
+        return json_encode(
+            $this->excludeKeys($this->parse($json), $excludedKeys),
+            self::NORMALIZED_JSON_OPTIONS
+        );
     }
 
     /**
@@ -117,7 +126,7 @@ class JsonHelper
      * @param array|null excludedKeys
      * @return mixed
      */
-    public function excludeKeys($data, array $excludedKeys = array())
+    public function excludeKeys($data, array $excludedKeys = [])
     {
 
         if (is_object($data)) {
