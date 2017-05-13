@@ -30,6 +30,11 @@ class JsonHelper
         return $this->getAtPath($data, $path);
     }
 
+    public function stringify($data)
+    {
+        return rtrim(json_encode($data, self::NORMALIZED_JSON_OPTIONS));
+    }
+
     /**
      * Checks is given JSON string is valid or not.
      *
@@ -49,43 +54,6 @@ class JsonHelper
     }
 
     /**
-     * Checks is given JSON contains somewhere in.
-     *
-     * @param mixed  $haystack contains parsed JSON value
-     * @param string $needle
-     *
-     * @return bool
-     */
-    public function isIncludes($haystack, $needle)
-    {
-        $parsedJson = $this->parse($needle);
-        $normalizedData = $this->generateNormalizedJson($haystack);
-        if (!is_object($haystack) && !is_array($haystack)) {
-            if (is_string($haystack) && is_string($parsedJson)) {
-                return false !== strpos($haystack, $parsedJson);
-            }
-        }
-
-        if ($normalizedData === $needle) {
-            return true;
-        }
-
-        if (is_object($haystack)) {
-            $haystack = get_object_vars($haystack);
-        }
-
-        if (is_array($haystack)) {
-            foreach ($haystack as $value) {
-                if ($this->isIncludes($value, $needle)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @param $json
      * @param null $path
      *
@@ -96,6 +64,11 @@ class JsonHelper
         return $this->generateNormalizedJson($this->parse($json, $path));
     }
 
+    public function normalizeAndParse($json, $path = null)
+    {
+        $data = $this->parse($json, $path);
+    }
+
     /**
      * @param mixed $data
      *
@@ -103,18 +76,12 @@ class JsonHelper
      */
     public function generateNormalizedJson($data)
     {
-        return rtrim(json_encode(
-            $this->sortObjectKeys($data),
-            self::NORMALIZED_JSON_OPTIONS
-        ));
+        return $this->stringify($this->sortObjectKeys($data));
     }
 
     public function excludeKeysFromJson(string $json, array $excludedKeys = [])
     {
-        return json_encode(
-            $this->excludeKeys($this->parse($json), $excludedKeys),
-            self::NORMALIZED_JSON_OPTIONS
-        );
+        return $this->stringify($this->excludeKeys($this->parse($json), $excludedKeys));
     }
 
     /**

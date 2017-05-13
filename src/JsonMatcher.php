@@ -168,33 +168,6 @@ class JsonMatcher
     }
 
     /**
-     * Checks that given JSON presents in some collection or property.
-     *
-     * @param string $json
-     * @param array  $options
-     *
-     * @return $this
-     */
-    public function includes($json, array $options = [])
-    {
-        $actual = $this->scrub($this->subject, $options);
-        $expected = $this->scrub($json, array_diff_key(
-            // we should pass all options except `path`
-            $options, [static::OPTION_PATH => null]
-        ));
-
-        if (
-            $this->isPositive($options) ^ $this->jsonHelper->isIncludes(
-                $this->jsonHelper->parse($actual), $expected
-            )
-        ) {
-            throw JsonIncludesException::create($options);
-        }
-
-        return $this;
-    }
-
-    /**
      * Sets subject on which matching will be performed.
      *
      * @param string $subject

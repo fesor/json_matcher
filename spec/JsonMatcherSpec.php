@@ -278,93 +278,93 @@ class JsonMatcherSpec extends ObjectBehavior
     }
     //</editor-fold>
 
-    // <editor-fold desc="includes spec">
-    function it_matches_included_array_elements()
-    {
-        $json = '["one",1,1.0,true,false,null]';
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('"one"');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('1');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('1.0');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('true');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('false');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('null');
-    }
-
-    function it_matches_an_array_included_in_an_array()
-    {
-        $json = '[[1,2,3],[4,5,6]]';
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('[1, 2, 3]');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('[4, 5, 6]');
-    }
-
-    function it_matches_a_hash_included_in_an_array()
-    {
-        $json = '[{"one":1},{"two":2}]';
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"one":1}');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"two":2}');
-    }
-
-    function it_matches_included_hash_values()
-    {
-        $json = '{"string":"one","integer":1,"float":1.0,"true":true,"false":false,"null":null}';
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('"one"');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('1');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('1.0');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('true');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('false');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('null');
-    }
-
-    function it_matches_a_hash_included_in_a_hash()
-    {
-        $json = '{"one":{"two":3},"four":{"five":6}}';
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"two":3}');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"five":6}');
-    }
-
-    function it_matches_an_array_included_in_a_hash()
-    {
-        $json = '{"one":[2,3],"four":[5,6]}';
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('[2,3]');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('[5,6]');
-    }
-
-    function it_matches_a_substring()
-    {
-        $json = '"json"';
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('"js"');
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('"json"');
-    }
-
-    function it_matches_t_a_path()
-    {
-        $json = '{"one":{"two":[3,4]}}';
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('[3,4]', ['at' => 'one']);
-    }
-
-    function it_ignores_excluded_keys()
-    {
-        $json = '[{"id":1,"two":3}]';
-        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"two":3}');
-    }
-
-    function it_matches_an_subset_included_in_a_hash()
-    {
-        $json = '{"id": 1, "name": "Foo"}';
-        $this->setSubject($json)->shouldNotThrow()->duringIncludes('{"name":"Foo"}');
-    }
-
-    function it_matches_an_subset_included_in_a_collection_of_hashes()
-    {
-        $json = '[{"id": 1, "name": "Foo"}, {"id": 2, "name": "Bar"}]';
-        $this->setSubject($json)->shouldNotThrow()->duringIncludes('{"name":"Bar"}');
-    }
-
-    function it_should_throw_exception_if_it_cant_find_subset_in_hash()
-    {
-        $json = '{"id": 1, "name": "Foo"}';
-        $this->setSubject($json)->shouldThrow()->duringIncludes('{"name":"Bar"}');
-    }
+//    // <editor-fold desc="includes spec">
+//    function it_matches_included_array_elements()
+//    {
+//        $json = '["one",1,1.0,true,false,null]';
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('"one"');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('1');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('1.0');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('true');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('false');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('null');
+//    }
+//
+//    function it_matches_an_array_included_in_an_array()
+//    {
+//        $json = '[[1,2,3],[4,5,6]]';
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('[1, 2, 3]');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('[4, 5, 6]');
+//    }
+//
+//    function it_matches_a_hash_included_in_an_array()
+//    {
+//        $json = '[{"one":1},{"two":2}]';
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"one":1}');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"two":2}');
+//    }
+//
+//    function it_matches_included_hash_values()
+//    {
+//        $json = '{"string":"one","integer":1,"float":1.0,"true":true,"false":false,"null":null}';
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('"one"');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('1');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('1.0');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('true');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('false');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('null');
+//    }
+//
+//    function it_matches_a_hash_included_in_a_hash()
+//    {
+//        $json = '{"one":{"two":3},"four":{"five":6}}';
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"two":3}');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"five":6}');
+//    }
+//
+//    function it_matches_an_array_included_in_a_hash()
+//    {
+//        $json = '{"one":[2,3],"four":[5,6]}';
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('[2,3]');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('[5,6]');
+//    }
+//
+//    function it_matches_a_substring()
+//    {
+//        $json = '"json"';
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('"js"');
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('"json"');
+//    }
+//
+//    function it_matches_t_a_path()
+//    {
+//        $json = '{"one":{"two":[3,4]}}';
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('[3,4]', ['at' => 'one']);
+//    }
+//
+//    function it_ignores_excluded_keys()
+//    {
+//        $json = '[{"id":1,"two":3}]';
+//        $this->setSubject(($json))->shouldNotThrow()->duringIncludes('{"two":3}');
+//    }
+//
+//    function it_matches_an_subset_included_in_a_hash()
+//    {
+//        $json = '{"id": 1, "name": "Foo"}';
+//        $this->setSubject($json)->shouldNotThrow()->duringIncludes('{"name":"Foo"}');
+//    }
+//
+//    function it_matches_an_subset_included_in_a_collection_of_hashes()
+//    {
+//        $json = '[{"id": 1, "name": "Foo"}, {"id": 2, "name": "Bar"}]';
+//        $this->setSubject($json)->shouldNotThrow()->duringIncludes('{"name":"Bar"}');
+//    }
+//
+//    function it_should_throw_exception_if_it_cant_find_subset_in_hash()
+//    {
+//        $json = '{"id": 1, "name": "Foo"}';
+//        $this->setSubject($json)->shouldThrow()->duringIncludes('{"name":"Bar"}');
+//    }
     // </editor-fold>
 
 }
