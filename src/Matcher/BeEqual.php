@@ -6,7 +6,7 @@ use Fesor\JsonMatcher\JsonHelperAwareMatcher;
 use Fesor\JsonMatcher\JsonHelperAwareTrait;
 use Fesor\JsonMatcher\Matcher;
 
-class EqualsMatcher implements JsonHelperAwareMatcher
+class BeEqual implements JsonHelperAwareMatcher
 {
     use JsonHelperAwareTrait;
 

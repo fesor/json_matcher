@@ -6,7 +6,7 @@ use Fesor\JsonMatcher\JsonHelperAwareMatcher;
 use Fesor\JsonMatcher\JsonHelperAwareTrait;
 use Fesor\JsonMatcher\Matcher;
 
-class SizeMatcher implements JsonHelperAwareMatcher
+class HaveSize implements JsonHelperAwareMatcher
 {
     use JsonHelperAwareTrait;
 
@@ -16,6 +16,11 @@ class SizeMatcher implements JsonHelperAwareMatcher
     public function __construct(int $expectedSize)
     {
         $this->expectedSize = $expectedSize;
+    }
+
+    public static function of(int $size): self
+    {
+        return new self($size);
     }
 
     public function at(string $path)

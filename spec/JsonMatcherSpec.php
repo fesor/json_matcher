@@ -20,20 +20,20 @@ class JsonMatcherSpec extends ObjectBehavior
         $matcher->match('subject', false)->willReturn(true);
         $matcher->setHelper(Argument::type(JsonHelper::class))->shouldBeCalled();
 
-        $this->matches($matcher);
+        $this->shouldNotThrow()->during('should', [$matcher]);
     }
 
     function it_uses_given_matcher_to_validate_subject(Matcher $matcher)
     {
         $matcher->match('subject', false)->willReturn(false);
 
-        $this->matches($matcher);
+        $this->shouldNotThrow()->during('should', [$matcher]);
     }
 
     function it_allows_to_use_negative_matching(Matcher $matcher)
     {
         $matcher->match('subject', true)->willReturn(true);
 
-        $this->notMatches($matcher);
+        $this->shouldNotThrow()->during('shouldNot', [$matcher]);
     }
 }

@@ -3,11 +3,10 @@
 namespace spec\Fesor\JsonMatcher\Matcher;
 
 use Fesor\JsonMatcher\JsonHelper;
-use Fesor\JsonMatcher\Matcher\SizeMatcher;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class SizeMatcherSpec extends ObjectBehavior
+class HaveSizeSpec extends ObjectBehavior
 {
     function let()
     {

@@ -6,7 +6,7 @@ use Fesor\JsonMatcher\JsonHelperAwareMatcher;
 use Fesor\JsonMatcher\JsonHelperAwareTrait;
 use Fesor\JsonMatcher\Matcher;
 
-class IncludesMatcher implements JsonHelperAwareMatcher
+class Contain implements JsonHelperAwareMatcher
 {
     use JsonHelperAwareTrait;
 
@@ -18,6 +18,11 @@ class IncludesMatcher implements JsonHelperAwareMatcher
     {
         $this->expectedJson = $expectedJson;
         $this->ignoredKeys = [];
+    }
+
+    public static function subset(string $subset)
+    {
+        return new self($subset);
     }
 
     public function ignoring(string ...$keys): self

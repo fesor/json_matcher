@@ -5,7 +5,7 @@ namespace spec\Fesor\JsonMatcher\Matcher;
 use Fesor\JsonMatcher\JsonHelper;
 use PhpSpec\ObjectBehavior;
 
-class EqualsMatcherSpec extends ObjectBehavior
+class BeEqualSpec extends ObjectBehavior
 {
     function let(JsonHelper $helper)
     {

@@ -17,7 +17,7 @@ class JsonMatcher
      * @param Matcher $matcher
      * @return JsonMatcher
      */
-    public function matches(Matcher $matcher): self
+    public function should(Matcher $matcher): self
     {
         $this->injectHelperIfNeeded($matcher);
 
@@ -32,7 +32,7 @@ class JsonMatcher
      * @param Matcher $matcher
      * @return JsonMatcher
      */
-    public function notMatches(Matcher $matcher): self
+    public function shouldNot(Matcher $matcher): self
     {
         $this->injectHelperIfNeeded($matcher);
         if (!$matcher->match($this->subject, true)) {

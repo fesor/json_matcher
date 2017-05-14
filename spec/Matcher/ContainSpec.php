@@ -3,11 +3,10 @@
 namespace spec\Fesor\JsonMatcher\Matcher;
 
 use Fesor\JsonMatcher\JsonHelper;
-use Fesor\JsonMatcher\Matcher\IncludesMatcher;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class IncludesMatcherSpec extends ObjectBehavior
+class ContainSpec extends ObjectBehavior
 {
     function it_checks_for_subset_of_data_in_given_json()
     {
