@@ -4,8 +4,9 @@ namespace Fesor\JsonMatcher\Matcher;
 
 use Fesor\JsonMatcher\JsonHelperAware;
 use Fesor\JsonMatcher\JsonHelperAwareTrait;
+use Fesor\JsonMatcher\Matcher;
 
-class IncludesMatcher implements JsonHelperAware
+class IncludesMatcher implements JsonHelperAware, Matcher
 {
     use JsonHelperAwareTrait;
 
