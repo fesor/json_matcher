@@ -10,7 +10,7 @@ class HaveSizeSpec extends ObjectBehavior
 {
     function let()
     {
-        $this->beConstructedWith(3);
+        $this->beConstructedThrough('of', [3]);
         $this->setHelper(new JsonHelper());
     }
 

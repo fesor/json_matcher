@@ -9,7 +9,7 @@ class BeEqualSpec extends ObjectBehavior
 {
     function let(JsonHelper $helper)
     {
-        $this->beConstructedWith('expected json');
+        $this->beConstructedThrough('to', ['expected json']);
         $this->setHelper($helper);
 
         $helper->normalize('actual json', null)->willReturn('normalized json');

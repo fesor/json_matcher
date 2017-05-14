@@ -54,7 +54,7 @@ class ContainSpec extends ObjectBehavior
 
     private function specifySubset(string $expectedSubset)
     {
-        $this->beConstructedWith($expectedSubset);
+        $this->beConstructedThrough('subset', [$expectedSubset]);
         $this->setHelper(new JsonHelper());
     }
 }
