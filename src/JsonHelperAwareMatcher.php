@@ -2,7 +2,7 @@
 
 namespace Fesor\JsonMatcher;
 
-interface JsonHelperAware
+interface JsonHelperAwareMatcher extends Matcher
 {
     public function setHelper(JsonHelper $normalizer);
 }

@@ -2,11 +2,11 @@
 
 namespace Fesor\JsonMatcher\Matcher;
 
-use Fesor\JsonMatcher\JsonHelperAware;
+use Fesor\JsonMatcher\JsonHelperAwareMatcher;
 use Fesor\JsonMatcher\JsonHelperAwareTrait;
 use Fesor\JsonMatcher\Matcher;
 
-class EqualsMatcher implements JsonHelperAware, Matcher
+class EqualsMatcher implements JsonHelperAwareMatcher
 {
     use JsonHelperAwareTrait;
 
