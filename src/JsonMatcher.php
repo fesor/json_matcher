@@ -2,6 +2,8 @@
 
 namespace Fesor\JsonMatcher;
 
+use Fesor\JsonMatcher\Matcher\Not;
+
 class JsonMatcher
 {
     private $subject;
@@ -35,9 +37,7 @@ class JsonMatcher
     public function shouldNot(Matcher $matcher): self
     {
         $this->injectHelperIfNeeded($matcher);
-        if (!$matcher->match($this->subject, true)) {
-
-        }
+        (new Not($matcher))->match($this->subject, false);
 
         return $this;
     }

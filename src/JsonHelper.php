@@ -64,11 +64,6 @@ class JsonHelper
         return $this->generateNormalizedJson($this->parse($json, $path));
     }
 
-    public function normalizeAndParse($json, $path = null)
-    {
-        $data = $this->parse($json, $path);
-    }
-
     /**
      * @param mixed $data
      *
@@ -106,13 +101,14 @@ class JsonHelper
             return $object;
         }
 
-        if (is_array($data)) {
-            return array_map(function ($data) use ($excludedKeys) {
-                return $this->excludeKeys($data, $excludedKeys);
-            }, $data);
+        if (!is_array($data)) {
+            return $data;
         }
 
-        return $data;
+        return array_map(function ($data) use ($excludedKeys) {
+            return $this->excludeKeys($data, $excludedKeys);
+        }, $data);
+
     }
 
     /**
