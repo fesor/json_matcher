@@ -55,7 +55,7 @@ class JsonHelper
 
     /**
      * @param $json
-     * @param null $path
+     * @param string $path
      *
      * @return string
      */
