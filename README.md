@@ -8,7 +8,8 @@ Json Matcher
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fesor/json_matcher/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fesor/json_matcher/?branch=master) 
 [![Total Downloads](https://poser.pugx.org/fesor/json_matcher/downloads.svg)](https://packagist.org/packages/fesor/json_matcher)
 
-Assertion library for simplifying JSON data and structure verification in your tests. It's framework-agnostic, so you can use it with PhpUnit, PhpSpec, Peridot or whatever framework you use.
+Assertion library for simplifying JSON data and structure verification in your tests. It's framework-agnostic, so you 
+can use it with PhpUnit, PhpSpec, Peridot or whatever framework you use.
 
 ## Why another JSON assertion library?
 
@@ -16,39 +17,44 @@ If you tried to test your JSON based REST APIs, then you probably faced a severa
 
 - You can't simply check is a response is equal to given string as there are things like server-generated IDs and timestamps.
 - Key ordering should be the same both for your API and for expected JSON.
-- Matching the whole responses breaks DRY for the tests
+- Matching the whole responses breaks DRY for the tests.
 
-All these issues can be solved with two simple things: JSON normalization and key exclusion on matching. This is what this library does. It provides you a way to verify data in given JSON in multiple steps instead of one big assertion.
+All these issues can be solved with two simple things: JSON normalization and key exclusion on matching. This is what 
+this library does. It provides you a way to verify data in given JSON in multiple steps instead of one big assertion.
 
-For example we are developing an friend list feature for our API for. What we want to check is only is given user presents in response, we don't want to check whole response, it could be done via json schema validation or on another test cases.
+For example we are developing an friend list feature for our API. What we want to check is only that given user 
+presents in response, we don't want to check whole response.
 
 ```php
+$response = '{
+    "data": {
+        "id": "CQEDAwIIAgUCCwkKBAoOAQ",
+        "name": "Alice",
+        "registered_at": "2017-04-30T16:12:34+00:00",
+        "friends": [
+            {
+                "id": "BAkMDgUIDw8DDQwEBAAHAQ", 
+                "name": "John",
+                "registered_at": "2017-04-28T20:34:50+00:00"
+            }
+        ]
+    }
+}';
 
-$alice = new User('Alice', 'Miller');
-$john = new User('John', 'Smith');
-$alice->addFriend($john);
-
-$json = JsonMatcher::create(
-    json_encode($alice->toArrayIncludingFriends()), ['id', 'created_at']
-);
+$json = JsonMatcher::create($response)
+    ->should(Equals::to('{"name": "John"}')->ignoring('id', 'registered_at')->at('/data/friends/0'))
+;
 
 ```
 
-In above example we just created an `JsonMatcher` instance and specified excluded-by-default keys (`id` and `created_at`). Excluded keys will be removed from JSON and it's values will not interfere in equality assertion. You can also override this list of keys via matching `excluding` and `including` options.
+In above example we just took json response and verified that at path `/data/friends/0` we had expected json. We also 
+excluded keys `id` and `registered_at` from comparision.
 
-Then we can check is John presents in Alice's friend list at some specific position via json paths:
-```php
-$json->equal(json_encode($john->toArray()), ['at' => 'friends/0']);
-```
 
-Or if we don't know specific position, we can just check is John just presents in our friendlist.
-```php
-$json->includes(json_encode($john->toArray()), ['at' => 'friends']);
-```
+Or if we don't want to know specific position, we can just check is John presents in our friend list:
 
-Or we can just verify is any John presents in Alice's friend list:
 ```php
-$json->includes('{"first_name": "John"}'), ['at' => 'friends']);
+$json->should(Contain::subset('{"name": "John"}')->ignoring('id', 'registered_at')->at('/data/friends');
 ```
 
 ## Getting started
