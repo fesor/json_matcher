@@ -1,6 +1,6 @@
 {
     "name": "fesor/json_matcher",
-    "description": "Collection if JSON matchers for painless usage",
+    "description": "Collection of JSON matchers for painless usage",
     "license": "MIT",
     "authors": [
         {
@@ -13,12 +13,12 @@
       "psr-4": {"Fesor\\JsonMatcher\\": "src/", "spec\\Fesor\\JsonMatcher\\": "spec/"}
     },
     "require": {
-      "php": ">=5.4.0"
+      "php": ">=7.2.0"
     },
     "require-dev": {
-      "phpspec/phpspec": "2.1.*@dev",
-      "fabpot/php-cs-fixer": "~0.5",
-      "henrikbjorn/phpspec-code-coverage": "~1.0"
+        "phpspec/phpspec": "^6.1",
+        "friends-of-phpspec/phpspec-code-coverage": "^4.3",
+        "friendsofphp/php-cs-fixer": "^2.16"
     },
     "config": {
       "bin-dir": "bin"

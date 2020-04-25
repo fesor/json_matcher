@@ -6,8 +6,8 @@ class PathMatchException extends MatchException
 {
     /**
      * PathMatchException constructor.
+     *
      * @param string $expectedPath
-     * @param array $options
      */
     public function __construct($expectedPath, array $options)
     {

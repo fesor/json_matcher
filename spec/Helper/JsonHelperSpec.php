@@ -7,34 +7,33 @@ use PhpSpec\ObjectBehavior;
 
 class JsonHelperSpec extends ObjectBehavior
 {
-
-    function it_parses_json()
+    public function it_parses_json()
     {
         $result = new \stdClass();
         $result->json = ['spec'];
         $this->parse('{"json":["spec"]}')->shouldBeLike($result);
     }
 
-    function it_parses_JSON_values()
+    public function it_parses_JSON_values()
     {
         $this->parse('"json_spec"')->shouldBe('json_spec');
         $this->parse('10')->shouldBe(10);
         $this->parse('null')->shouldBe(null);
     }
 
-    function it_raises_a_parser_error_for_invalid_JSON()
+    public function it_raises_a_parser_error_for_invalid_JSON()
     {
         $this->shouldThrow()->duringParse('json_spec');
     }
 
-    function it_parses_at_a_path_if_given()
+    public function it_parses_at_a_path_if_given()
     {
         $json = '{"json": ["spec"]}';
-        $this->parse($json, 'json')->shouldBeLike(["spec"]);
+        $this->parse($json, 'json')->shouldBeLike(['spec']);
         $this->parse($json, 'json/0')->shouldBe('spec');
     }
 
-    function it_raises_an_error_for_a_missing_path()
+    public function it_raises_an_error_for_a_missing_path()
     {
         $json = '{"json": ["spec"]}';
         $this->shouldThrow(
@@ -42,19 +41,19 @@ class JsonHelperSpec extends ObjectBehavior
         )->duringParse($json, 'json/1');
     }
 
-    function it_parses_at_a_numeric_string_path()
+    public function it_parses_at_a_numeric_string_path()
     {
         $json = '{"1": "json"}';
         $this->parse($json, '1')->shouldBe('json');
     }
 
-    function it_correctly_validate_json_value()
+    public function it_correctly_validate_json_value()
     {
         $this->isValid('"json_spec"')->shouldBe(true);
         $this->isValid('json_spec')->shouldBe(false);
     }
 
-    function it_normalize_json()
+    public function it_normalize_json()
     {
         $normalizedJson = <<<JSON
 {
@@ -69,27 +68,27 @@ JSON;
         $this->normalize('{"laser":{"lemon": "orange", "banana": "watermelon"},"json":"spec"}')->shouldBe(rtrim($normalizedJson));
     }
 
-    function it_normalize_json_value()
+    public function it_normalize_json_value()
     {
         $this->normalize('1e+1')->shouldBe('10');
     }
 
-    function it_normalizes_at_a_path()
+    public function it_normalizes_at_a_path()
     {
-        $this->normalize('{"json":["spec"]}', "json/0")->shouldBe('"spec"');
+        $this->normalize('{"json":["spec"]}', 'json/0')->shouldBe('"spec"');
     }
 
-    function it_accept_a_json_value()
+    public function it_accept_a_json_value()
     {
         $this->normalize('1e+1')->shouldBe('10');
     }
 
-    function it_normalizes_a_json_value()
+    public function it_normalizes_a_json_value()
     {
         $this->normalize('"json_spec"')->shouldBe('"json_spec"');
     }
 
-    function it_does_not_change_collection_order()
+    public function it_does_not_change_collection_order()
     {
         $normalizedJson = <<<JSON
 [
@@ -101,7 +100,7 @@ JSON;
         $this->generateNormalizedJson(['spec', 'json'])->shouldBe(rtrim($normalizedJson));
     }
 
-    function it_generates_a_normalized_json_document()
+    public function it_generates_a_normalized_json_document()
     {
         $normalizedJson = <<<JSON
 {
@@ -110,49 +109,49 @@ JSON;
     ]
 }
 JSON;
-        $this->generateNormalizedJson((object) ['json'=>['spec']])->shouldBe(rtrim($normalizedJson));
+        $this->generateNormalizedJson((object) ['json' => ['spec']])->shouldBe(rtrim($normalizedJson));
     }
 
-    function it_should_exclude_keys()
+    public function it_should_exclude_keys()
     {
-        $data = (object) array(
+        $data = (object) [
             'id' => 1,
-            'collection' => array(
-                (object) array(
+            'collection' => [
+                (object) [
                     'id' => 1,
-                    'json' => 'spec'
-                )
-            )
-        );
+                    'json' => 'spec',
+                ],
+            ],
+        ];
 
-        $this->excludeKeys($data, array('id'))->shouldBeLike((object) array(
-            'collection' => array(
-                (object) array(
-                    'json' => 'spec'
-                )
-            )
-        ));
+        $this->excludeKeys($data, ['id'])->shouldBeLike((object) [
+            'collection' => [
+                (object) [
+                    'json' => 'spec',
+                ],
+            ],
+        ]);
     }
 
-    function it_checks_is_collection_includes_json()
+    public function it_checks_is_collection_includes_json()
     {
         $this->isIncludes(['json'], '"json"')->shouldBe(true);
         $this->isIncludes(['spec'], '"json"')->shouldBe(false);
     }
 
-    function it_checks_is_json_string_includes_another_json_string()
+    public function it_checks_is_json_string_includes_another_json_string()
     {
         $this->isIncludes('json', '"json"')->shouldBe(true);
         $this->isIncludes('json_spec', '"json"')->shouldBe(true);
         $this->isIncludes('spec', '"json"')->shouldBe(false);
     }
 
-    function it_checks_is_json_contains_in_some_property()
+    public function it_checks_is_json_contains_in_some_property()
     {
         $obj = (object) [
             'test' => (object) [
-                'key' => 'value'
-            ]
+                'key' => 'value',
+            ],
         ];
 
         $needle = <<<JSON
@@ -166,23 +165,20 @@ JSON;
 }
 JSON;
 
-
         $this->isIncludes($obj, $needle)->shouldBe(true);
         $this->isIncludes($obj, $falseNeedle)->shouldBe(false);
-
     }
 
     public function it_checks_for_inclusions_recursively()
     {
         $obj = (object) [
             'test' => (object) [
-                'key' => ['value', 'find me']
-            ]
+                'key' => ['value', 'find me'],
+            ],
         ];
 
         $this->isIncludes($obj, '"find"')->shouldBe(true);
         $this->isIncludes($obj, '"find me"')->shouldBe(true);
         $this->isIncludes($obj, '"not find me"')->shouldBe(false);
     }
-
 }

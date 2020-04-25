@@ -6,7 +6,6 @@ use Fesor\JsonMatcher\Helper\JsonHelper;
 
 class JsonMatcherFactory
 {
-
     /**
      * @var JsonHelper
      */
@@ -17,10 +16,6 @@ class JsonMatcherFactory
      */
     private $excludedKeys;
 
-    /**
-     * @param JsonHelper $jsonHelper
-     * @param array $excludedKeys
-     */
     public function __construct(JsonHelper $jsonHelper, array $excludedKeys = [])
     {
         $this->jsonHelper = $jsonHelper;
@@ -28,16 +23,16 @@ class JsonMatcherFactory
     }
 
     /**
-     * Creates instance of matcher with given subject
+     * Creates instance of matcher with given subject.
      *
      * @param string $subject
+     *
      * @return JsonMatcher
      */
     public function create($subject)
     {
         $matcher = new JsonMatcher($this->jsonHelper, $this->excludedKeys);
-        
+
         return $matcher->setSubject($subject);
     }
-    
 }

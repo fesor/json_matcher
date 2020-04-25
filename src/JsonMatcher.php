@@ -11,8 +11,7 @@ use Fesor\JsonMatcher\Exception\PathMatchException;
 use Fesor\JsonMatcher\Helper\JsonHelper;
 
 /**
- * Class JsonMatcher
- * @package Fesor\JsonMatcher
+ * Class JsonMatcher.
  *
  * @method $this notEqual() notEqual(string $expected, array $options=[])
  * @method $this notHasSize() notHasSize(int $expectedSize, array $options=[])
@@ -22,7 +21,6 @@ use Fesor\JsonMatcher\Helper\JsonHelper;
  */
 class JsonMatcher
 {
-
     const OPTION_PATH = 'at';
     const OPTION_EXCLUDE_KEYS = 'excluding';
     const OPTION_INCLUDE_KEYS = 'including';
@@ -43,10 +41,6 @@ class JsonMatcher
      */
     private $subject;
 
-    /**
-     * @param JsonHelper $jsonHelper
-     * @param array      $excludeKeys
-     */
     public function __construct(JsonHelper $jsonHelper, array $excludeKeys = [])
     {
         $this->jsonHelper = $jsonHelper;
@@ -54,25 +48,25 @@ class JsonMatcher
     }
 
     /**
-     * Named constructor for simplify usage
+     * Named constructor for simplify usage.
      *
-     * @param  string      $subject
-     * @param  array       $excludedKeys
+     * @param string $subject
+     *
      * @return JsonMatcher
      */
     public static function create($subject, array $excludedKeys = ['id'])
     {
         $matcher = new JsonMatcher(new JsonHelper(), $excludedKeys);
         $matcher->setSubject($subject);
-        
+
         return $matcher;
     }
 
     /**
-     * Checks is given JSON equal to another one
+     * Checks is given JSON equal to another one.
      *
-     * @param  string $expected
-     * @param  array  $options
+     * @param string $expected
+     *
      * @return $this
      */
     public function equal($expected, array $options = [])
@@ -91,14 +85,12 @@ class JsonMatcher
     }
 
     /**
-     * Checks that given path exists in JSON
+     * Checks that given path exists in JSON.
      *
-     * @param  string|null $path
-     * @param  array       $options
+     * @param string|null $path
+     *
      * @return $this
      */
-
-
     public function hasPath($path, array $options = [])
     {
         // get base path
@@ -107,9 +99,8 @@ class JsonMatcher
         $pathExists = true;
         try {
             $this->jsonHelper->parse($this->subject, $path);
-        } catch(MissingPathException $e){
+        } catch (MissingPathException $e) {
             $pathExists = false;
-
         }
 
         if ($this->isPositive($options) ^ $pathExists) {
@@ -120,10 +111,10 @@ class JsonMatcher
     }
 
     /**
-     * Checks that given JSON have exact amount of items
+     * Checks that given JSON have exact amount of items.
      *
-     * @param  integer $expectedSize
-     * @param  array   $options
+     * @param int $expectedSize
+     *
      * @return $this
      */
     public function hasSize($expectedSize, array $options = [])
@@ -135,7 +126,6 @@ class JsonMatcher
         }
 
         if (!(is_array($data) || is_string($data))) {
-
             throw new JsonSizeException('Can\'t get size of scalar JSON value');
         }
 
@@ -147,17 +137,17 @@ class JsonMatcher
     }
 
     /**
-     * Checks that given JSON at specific path have expected path
+     * Checks that given JSON at specific path have expected path.
      *
-     * @param  string $type
-     * @param  array  $options
+     * @param string $type
+     *
      * @return $this
      */
     public function hasType($type, array $options = [])
     {
         $data = $this->jsonHelper->parse($this->subject, $this->getPath($options));
 
-        if ($type == 'float') {
+        if ('float' == $type) {
             $type = 'double';
         }
 
@@ -170,10 +160,10 @@ class JsonMatcher
     }
 
     /**
-     * Checks that given JSON presents in some collection or property
+     * Checks that given JSON presents in some collection or property.
      *
-     * @param  string $json
-     * @param  array  $options
+     * @param string $json
+     *
      * @return $this
      */
     public function includes($json, array $options = [])
@@ -196,9 +186,10 @@ class JsonMatcher
     }
 
     /**
-     * Sets subject on which matching will be performed
+     * Sets subject on which matching will be performed.
      *
-     * @param  string $subject
+     * @param string $subject
+     *
      * @return $this
      */
     public function setSubject($subject)
@@ -209,10 +200,10 @@ class JsonMatcher
     }
 
     /**
-     * Negative matching
+     * Negative matching.
      *
-     * @param  string $name
-     * @param  array  $arguments
+     * @param string $name
+     *
      * @return $this
      */
     public function __call($name, array $arguments = [])
@@ -243,10 +234,10 @@ class JsonMatcher
     }
 
     /**
-     * Prepares JSON for matching
+     * Prepares JSON for matching.
      *
-     * @param  string $json
-     * @param  array  $options
+     * @param string $json
+     *
      * @return string
      */
     private function scrub($json, array $options = [])
@@ -260,7 +251,6 @@ class JsonMatcher
     }
 
     /**
-     * @param array $options
      * @return string|null
      */
     private function getPath(array $options)
@@ -269,7 +259,6 @@ class JsonMatcher
     }
 
     /**
-     * @param array $options
      * @return array
      */
     private function getExcludedKeys(array $options)
@@ -281,10 +270,7 @@ class JsonMatcher
     }
 
     /**
-     * @param array $options
      * @param string $optionName
-     * @param mixed $default
-     * @return mixed
      */
     private function option(array $options, $optionName, $default = null)
     {
@@ -294,12 +280,10 @@ class JsonMatcher
     }
 
     /**
-     * @param array $options
      * @return bool
      */
     private function isPositive(array $options)
     {
         return empty($options[self::OPTION_NEGATIVE]);
     }
-
 }

@@ -6,7 +6,6 @@ use Fesor\JsonMatcher\JsonMatcher;
 
 abstract class MatchException extends \RuntimeException
 {
-
     /**
      * @param string $message
      */
@@ -16,7 +15,6 @@ abstract class MatchException extends \RuntimeException
     }
 
     /**
-     * @param  array  $options
      * @return string
      */
     protected static function getAt(array $options)
@@ -29,12 +27,10 @@ abstract class MatchException extends \RuntimeException
     }
 
     /**
-     * @param  array $options
      * @return bool
      */
     protected static function isPositive(array $options)
     {
         return empty($options[JsonMatcher::OPTION_NEGATIVE]);
     }
-
 }
