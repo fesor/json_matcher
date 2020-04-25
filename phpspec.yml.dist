@@ -9,4 +9,4 @@ code_coverage:
   output:
     clover: coverage.xml
 extensions:
-  - PhpSpec\Extension\CodeCoverageExtension
+  FriendsOfPhpSpec\PhpSpec\CodeCoverage\CodeCoverageExtension: ~

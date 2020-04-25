@@ -3,30 +3,23 @@
 namespace Fesor\JsonMatcher\Helper;
 
 use Fesor\JsonMatcher\Exception\MissingPathException;
-use Seld\JsonLint\JsonParser;
 
 /**
- * Class JsonHelper
- * @package Fesor\JsonMatcher\Helper
- *
- * Collection of utilities to work with JSON
+ * Class JsonHelper.
  */
 class JsonHelper
 {
-
     /**
-     * Returns parsed JSON data or its part by given path
+     * Returns parsed JSON data or its part by given path.
      *
-     * @param  string      $json
-     * @param  string|null $path
-     * @return mixed
+     * @param string      $json
+     * @param string|null $path
      */
     public function parse($json, $path = null)
     {
         $data = $this->parseJson($json);
 
-        if ($path === null) {
-            
+        if (null === $path) {
             return $data;
         }
 
@@ -34,17 +27,17 @@ class JsonHelper
     }
 
     /**
-     * Checks is given JSON string is valid or not
+     * Checks is given JSON string is valid or not.
      *
-     * @param  string  $json
-     * @return boolean
+     * @param string $json
+     *
+     * @return bool
      */
     public function isValid($json)
     {
         try {
             $this->parseJson($json);
         } catch (\InvalidArgumentException $e) {
-
             return false;
         }
 
@@ -52,15 +45,15 @@ class JsonHelper
     }
 
     /**
-     * Checks is given JSON contains somewhere in
+     * Checks is given JSON contains somewhere in.
      *
-     * @param  mixed  $haystack contains parsed JSON value
-     * @param  string $needle
+     * @param mixed  $haystack contains parsed JSON value
+     * @param string $needle
+     *
      * @return bool
      */
     public function isIncludes($haystack, $needle)
     {
-
         $parsedJson = $this->parse($needle);
         $normalizedData = $this->generateNormalizedJson($haystack);
         if (!is_object($haystack) && !is_array($haystack)) {
@@ -90,7 +83,8 @@ class JsonHelper
 
     /**
      * @param $json
-     * @param  null   $path
+     * @param null $path
+     *
      * @return string
      */
     public function normalize($json, $path = null)
@@ -99,7 +93,6 @@ class JsonHelper
     }
 
     /**
-     * @param  mixed  $data
      * @return string
      */
     public function generateNormalizedJson($data)
@@ -111,19 +104,19 @@ class JsonHelper
     }
 
     /**
-     * Recursively removes specific keys from
+     * Recursively removes specific keys from.
      *
      * @param $data
      * @param array|null excludedKeys
-     * @return mixed
      */
-    public function excludeKeys($data, array $excludedKeys = array())
+    public function excludeKeys($data, array $excludedKeys = [])
     {
-
         if (is_object($data)) {
             $object = new \stdClass();
             foreach (get_object_vars($data) as $key => $value) {
-                if (in_array($key, $excludedKeys)) continue;
+                if (in_array($key, $excludedKeys)) {
+                    continue;
+                }
                 $object->$key = $this->excludeKeys($value, $excludedKeys);
             }
 
@@ -140,17 +133,14 @@ class JsonHelper
     }
 
     /**
-     * Get data by given JSON path
+     * Get data by given JSON path.
      *
-     * @param  mixed  $data
-     * @param  string $path
-     * @return mixed
+     * @param string $path
      */
     private function getAtPath($data, $path)
     {
         $pathSegments = explode('/', trim($path, '/'));
         foreach ($pathSegments as $key) {
-
             if ($data instanceof \stdClass && property_exists($data, $key)) {
                 $data = $data->$key;
             } elseif (is_array($data) && is_numeric($key) && array_key_exists((int) $key, $data)) {
@@ -164,9 +154,10 @@ class JsonHelper
     }
 
     /**
-     * Recursively sorts objects keys
+     * Recursively sorts objects keys.
      *
      * @param $data
+     *
      * @return array|object
      */
     private function sortObjectKeys($data)
@@ -191,7 +182,6 @@ class JsonHelper
 
     /**
      * @param string $json
-     * @return mixed
      */
     private function parseJson($json)
     {

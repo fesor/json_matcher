@@ -1,22 +1,14 @@
 language: php
 
 php:
-    - 5.4
-    - 5.5
-    - 5.6
-    - hhvm
-    
-matrix:
-  allow_failures:
-    - php: hhvm
+    - 7.2
+    - 7.3
+    - 7.4
 
 before_script:
   - composer install
 
 script:
-  - bin/phpspec run
+  - phpdbg -qrr bin/phpspec run
+  - ./bin/php-cs-fixer fix --dry-run
   
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.xml
-
